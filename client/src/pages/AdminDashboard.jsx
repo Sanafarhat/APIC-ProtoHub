@@ -40,7 +40,7 @@ const AdminDashboard = () => {
 
   const [pendingBookings, setPendingBookings] = useState([]);
   const [completedBookings, setCompletedBookings] = useState([]);
-  const [activeTab, setActiveTab] = useState("pending");
+  const [activeTab, setActiveTab] = useState("overview");
 
   const handleBroadcast = async (e) => {
     e.preventDefault();
@@ -381,9 +381,50 @@ const AdminDashboard = () => {
         </div>
       </header>
 
-      <div className="max-w-[1800px] mx-auto px-4 md:px-6 py-8">
-        {/* MACRO METRICS */}
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-8">
+      <div className="max-w-[1800px] mx-auto px-4 md:px-6 py-8 flex flex-col lg:flex-row gap-8 items-start">
+        
+        {/* LEFT SIDEBAR NAVIGATION */}
+        <aside className="w-full lg:w-64 xl:w-72 flex-shrink-0 bg-slate-900/80 backdrop-blur border border-slate-800 rounded-2xl p-4 sticky top-24 z-40 flex flex-col gap-2 shadow-xl shadow-black/20">
+          <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2 px-2">Navigation Panel</h3>
+          
+          <button onClick={() => setActiveTab('overview')} className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all text-left ${activeTab === 'overview' ? 'bg-blue-600/20 text-blue-400 border border-blue-500/30' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200 border border-transparent'}`}>
+            <Map size={18} /> Statewide Overview
+          </button>
+          
+          <button onClick={() => setActiveTab('regional')} className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all text-left ${activeTab === 'regional' ? 'bg-indigo-600/20 text-indigo-400 border border-indigo-500/30' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200 border border-transparent'}`}>
+            <Database size={18} /> Regional Nodes
+          </button>
+          
+          <button onClick={() => setActiveTab('university')} className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all text-left ${activeTab === 'university' ? 'bg-cyan-600/20 text-cyan-400 border border-cyan-500/30' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200 border border-transparent'}`}>
+            <Layers size={18} /> University Categories
+          </button>
+          
+          <button onClick={() => setActiveTab('telemetry')} className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all text-left ${activeTab === 'telemetry' ? 'bg-amber-600/20 text-amber-400 border border-amber-500/30' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200 border border-transparent'}`}>
+            <Server size={18} /> Live Telemetry
+          </button>
+          
+          <button onClick={() => setActiveTab('broadcast')} className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-sm transition-all text-left ${activeTab === 'broadcast' ? 'bg-purple-600/20 text-purple-400 border border-purple-500/30' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200 border border-transparent'}`}>
+            <Zap size={18} /> Broadcast Center
+          </button>
+          
+          <div className="h-px bg-slate-800 my-2"></div>
+          
+          <button onClick={() => setActiveTab('pending')} className={`flex items-center justify-between px-4 py-3 rounded-xl font-bold text-sm transition-all text-left ${activeTab === 'pending' ? 'bg-emerald-600/20 text-emerald-400 border border-emerald-500/30' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200 border border-transparent'}`}>
+            <span className="flex items-center gap-3"><Shield size={18} /> Approvals</span>
+            {pendingBookings.length > 0 && <span className="bg-emerald-500/20 text-emerald-400 text-[10px] px-2 py-0.5 rounded-full">{pendingBookings.length}</span>}
+          </button>
+          
+          <button onClick={() => setActiveTab('completed')} className={`flex items-center justify-between px-4 py-3 rounded-xl font-bold text-sm transition-all text-left ${activeTab === 'completed' ? 'bg-indigo-600/20 text-indigo-400 border border-indigo-500/30' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200 border border-transparent'}`}>
+            <span className="flex items-center gap-3"><Star size={18} /> Completed Jobs</span>
+          </button>
+        </aside>
+
+        {/* MAIN CONTENT AREA */}
+        <div className="flex-1 min-w-0 flex flex-col gap-6 w-full">
+          {activeTab === 'overview' && (
+            <>
+              {/* MACRO METRICS */}
+              <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-2">
           <div className="p-6 rounded-2xl bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 shadow-xl relative overflow-hidden group">
             <div className="absolute -right-6 -top-6 w-32 h-32 bg-blue-500/10 rounded-full blur-2xl group-hover:bg-blue-500/20 transition-all"></div>
             <p className="text-xs font-black tracking-widest uppercase text-slate-500 mb-2 flex items-center gap-2">
@@ -455,9 +496,8 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* GEOSPATIAL MAP (MOCKUP) */}
-          <div className="lg:col-span-2 p-1 rounded-2xl bg-gradient-to-b from-slate-800 to-slate-900 border border-slate-700 shadow-2xl relative overflow-hidden h-[600px] flex flex-col">
+              {/* GEOSPATIAL MAP (MOCKUP) */}
+              <div className="p-1 rounded-2xl bg-gradient-to-b from-slate-800 to-slate-900 border border-slate-700 shadow-2xl relative overflow-hidden h-[600px] flex flex-col">
             <div className="p-4 border-b border-slate-800/80 bg-slate-900/50 flex justify-between items-center z-10">
               <h2 className="font-black text-lg flex items-center gap-2 tracking-wider">
                 <Map className="text-blue-400" /> STATEWIDE GEOSPATIAL VIEW
@@ -568,13 +608,13 @@ const AdminDashboard = () => {
                     <span className="text-xs">Issue</span>
                   </div>
                 </div>
+                </div>
               </div>
             </div>
-          </div>
+          </>
+        )}
 
-          {/* SIDE PANEL */}
-          <div className="flex flex-col gap-6">
-            {/* REGIONAL HUB STATUS */}
+          {activeTab === 'regional' && (
             <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800 shadow-xl">
               <h2 className="font-black text-lg mb-4 flex items-center gap-2 uppercase tracking-wider text-slate-300 border-b border-slate-800 pb-4">
                 <Database size={18} className="text-indigo-400" /> Regional
@@ -611,8 +651,9 @@ const AdminDashboard = () => {
                 ))}
               </div>
             </div>
+          )}
 
-            {/* UNIVERSITY CATEGORIES */}
+          {activeTab === 'university' && (
             <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800 shadow-xl">
               <h2 className="font-black text-lg mb-4 flex items-center gap-2 uppercase tracking-wider text-slate-300 border-b border-slate-800 pb-4">
                 <Database size={18} className="text-indigo-400" /> University
@@ -649,9 +690,10 @@ const AdminDashboard = () => {
                 ))}
               </div>
             </div>
+          )}
 
-            {/* LIVE TELEMETRY FEED */}
-            <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800 shadow-xl flex-1 flex flex-col">
+          {activeTab === 'telemetry' && (
+            <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800 shadow-xl flex-1 flex flex-col min-h-[600px]">
               <h2 className="font-black text-lg mb-4 flex items-center gap-2 uppercase tracking-wider text-slate-300 border-b border-slate-800 pb-4">
                 <Server size={18} className="text-amber-400" /> Live Telemetry
               </h2>
@@ -688,28 +730,11 @@ const AdminDashboard = () => {
                 View Raw Logs
               </button>
             </div>
-          </div>
-        </div>
+          )}
 
-        {/* BOOKINGS MANAGEMENT TABS */}
-        <div className="mt-8 mb-6 flex gap-3 border-b border-slate-800 pb-4 overflow-x-auto custom-scrollbar">
-          <button
-            onClick={() => setActiveTab('pending')}
-            className={`flex items-center gap-2 px-5 py-2.5 font-bold uppercase tracking-widest text-xs rounded-xl transition-all shadow-md whitespace-nowrap ${activeTab === 'pending' ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-500/20' : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-200 hover:bg-slate-800'}`}
-          >
-            <Shield size={16} /> Pending Approvals ({pendingBookings.length})
-          </button>
-          <button
-            onClick={() => setActiveTab('completed')}
-            className={`flex items-center gap-2 px-5 py-2.5 font-bold uppercase tracking-widest text-xs rounded-xl transition-all shadow-md whitespace-nowrap ${activeTab === 'completed' ? 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-indigo-500/20' : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-200 hover:bg-slate-800'}`}
-          >
-            <Star size={16} /> Completed Jobs ({completedBookings.length})
-          </button>
-        </div>
-
-          {/* BROADCAST COMMUNICATIONS CENTER */}
-          <div className="mt-6 p-6 rounded-2xl bg-slate-900 border border-slate-800 shadow-xl">
-            <h2 className="font-black text-lg mb-4 flex items-center gap-2 uppercase tracking-wider text-slate-300 border-b border-slate-800 pb-4">
+          {activeTab === 'broadcast' && (
+            <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800 shadow-xl">
+              <h2 className="font-black text-lg mb-4 flex items-center gap-2 uppercase tracking-wider text-slate-300 border-b border-slate-800 pb-4">
               <Zap size={18} className="text-indigo-400" /> Statewide Broadcast
               Center
             </h2>
@@ -812,13 +837,12 @@ const AdminDashboard = () => {
             </div>
           </div>
 
-          {/* BOOKINGS QUEUE */}
-          <div className="mb-8 p-6 rounded-2xl bg-slate-900 border border-slate-800 shadow-xl">
-            {activeTab === 'pending' && (
-              <>
-                <h2 className="font-black text-lg mb-4 flex items-center gap-2 uppercase tracking-wider text-slate-300 border-b border-slate-800 pb-4">
-                  <Shield size={18} className="text-emerald-400" /> Pending Booking Approvals (Step 1)
-                </h2>
+          )}
+          {activeTab === 'pending' && (
+            <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800 shadow-xl">
+              <h2 className="font-black text-lg mb-4 flex items-center gap-2 uppercase tracking-wider text-slate-300 border-b border-slate-800 pb-4">
+                <Shield size={18} className="text-emerald-400" /> Pending Booking Approvals (Step 1)
+              </h2>
             {pendingBookings.length === 0 ? (
               <div className="p-8 text-center bg-slate-950 border border-slate-800 rounded-xl text-slate-500 font-mono text-sm">
                 No bookings pending admin approval.
@@ -877,16 +901,16 @@ const AdminDashboard = () => {
                     </div>
                   </div>
                 ))}
-              </div>
-            )}
-                               </>
-            )}
+                </div>
+              )}
+            </div>
+          )}
 
-            {activeTab === 'completed' && (
-              <>
-                <h2 className="font-black text-lg mb-4 flex items-center gap-2 uppercase tracking-wider text-slate-300 border-b border-slate-800 pb-4">
-                  <Star size={18} className="text-indigo-400" /> Recently Completed Jobs (With Feedback)
-                </h2>
+          {activeTab === 'completed' && (
+            <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800 shadow-xl">
+              <h2 className="font-black text-lg mb-4 flex items-center gap-2 uppercase tracking-wider text-slate-300 border-b border-slate-800 pb-4">
+                <Star size={18} className="text-indigo-400" /> Recently Completed Jobs (With Feedback)
+              </h2>
                 {completedBookings.length === 0 ? (
                   <div className="p-8 text-center bg-slate-950 border border-slate-800 rounded-xl text-slate-500 font-mono text-sm">
                     No completed bookings with feedback found.
@@ -948,10 +972,10 @@ const AdminDashboard = () => {
                     ))}
                   </div>
                 )}
-              </>
-            )}
-          </div>
+            </div>
+          )}
         </div>
+      </div>
       {/* GLOBAL STYLES FOR ADMIN */}
       <style
         dangerouslySetInnerHTML={{
