@@ -39,6 +39,8 @@ const AdminDashboard = () => {
   const [broadcastResult, setBroadcastResult] = useState(null);
 
   const [pendingBookings, setPendingBookings] = useState([]);
+  const [completedBookings, setCompletedBookings] = useState([]);
+  const [activeTab, setActiveTab] = useState("pending");
 
   const handleBroadcast = async (e) => {
     e.preventDefault();
@@ -64,7 +66,6 @@ const AdminDashboard = () => {
     }
   };
 
-  const [completedBookings, setCompletedBookings] = useState([]);
 
   useEffect(() => {
     const userString = localStorage.getItem("user");
@@ -688,6 +689,23 @@ const AdminDashboard = () => {
               </button>
             </div>
           </div>
+        </div>
+
+        {/* BOOKINGS MANAGEMENT TABS */}
+        <div className="mt-8 mb-6 flex gap-3 border-b border-slate-800 pb-4 overflow-x-auto custom-scrollbar">
+          <button
+            onClick={() => setActiveTab('pending')}
+            className={`flex items-center gap-2 px-5 py-2.5 font-bold uppercase tracking-widest text-xs rounded-xl transition-all shadow-md whitespace-nowrap ${activeTab === 'pending' ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-500/20' : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-200 hover:bg-slate-800'}`}
+          >
+            <Shield size={16} /> Pending Approvals ({pendingBookings.length})
+          </button>
+          <button
+            onClick={() => setActiveTab('completed')}
+            className={`flex items-center gap-2 px-5 py-2.5 font-bold uppercase tracking-widest text-xs rounded-xl transition-all shadow-md whitespace-nowrap ${activeTab === 'completed' ? 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-indigo-500/20' : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-200 hover:bg-slate-800'}`}
+          >
+            <Star size={16} /> Completed Jobs ({completedBookings.length})
+          </button>
+        </div>
 
           {/* BROADCAST COMMUNICATIONS CENTER */}
           <div className="mt-6 p-6 rounded-2xl bg-slate-900 border border-slate-800 shadow-xl">
@@ -794,12 +812,13 @@ const AdminDashboard = () => {
             </div>
           </div>
 
-          {/* PENDING BOOKINGS QUEUE */}
-          <div className="mt-6 p-6 rounded-2xl bg-slate-900 border border-slate-800 shadow-xl">
-            <h2 className="font-black text-lg mb-4 flex items-center gap-2 uppercase tracking-wider text-slate-300 border-b border-slate-800 pb-4">
-              <Shield size={18} className="text-emerald-400" /> Pending Booking
-              Approvals (Step 1)
-            </h2>
+          {/* BOOKINGS QUEUE */}
+          <div className="mb-8 p-6 rounded-2xl bg-slate-900 border border-slate-800 shadow-xl">
+            {activeTab === 'pending' && (
+              <>
+                <h2 className="font-black text-lg mb-4 flex items-center gap-2 uppercase tracking-wider text-slate-300 border-b border-slate-800 pb-4">
+                  <Shield size={18} className="text-emerald-400" /> Pending Booking Approvals (Step 1)
+                </h2>
             {pendingBookings.length === 0 ? (
               <div className="p-8 text-center bg-slate-950 border border-slate-800 rounded-xl text-slate-500 font-mono text-sm">
                 No bookings pending admin approval.
@@ -860,77 +879,79 @@ const AdminDashboard = () => {
                 ))}
               </div>
             )}
-          </div>
+                               </>
+            )}
 
-          {/* RECENT FEEDBACK QUEUE */}
-          <div className="mt-6 p-6 rounded-2xl bg-slate-900 border border-slate-800 shadow-xl">
-            <h2 className="font-black text-lg mb-4 flex items-center gap-2 uppercase tracking-wider text-slate-300 border-b border-slate-800 pb-4">
-              <Star size={18} className="text-pink-400" /> Recent Innovator Feedback
-            </h2>
-            {completedBookings.length === 0 ? (
-              <div className="p-8 text-center bg-slate-950 border border-slate-800 rounded-xl text-slate-500 font-mono text-sm">
-                No recent feedback available.
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {completedBookings.map((booking) => (
-                  <div
-                    key={booking._id}
-                    className="p-5 bg-slate-950 rounded-xl border border-slate-800 flex flex-col gap-3"
-                  >
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <h4 className="font-bold text-emerald-400 text-sm">
-                          Booking #{booking._id.substring(18)}
-                        </h4>
-                        <p className="text-xs text-slate-500 font-mono">
-                          {new Date(booking.createdAt).toLocaleString()}
-                        </p>
-                      </div>
-                      <span className="bg-emerald-900/30 text-emerald-400 border border-emerald-900/50 px-2 py-1 rounded text-[9px] font-black uppercase tracking-widest whitespace-nowrap">
-                        Completed
-                      </span>
-                    </div>
-                    <div className="text-sm border-t border-slate-800 pt-3">
-                      <p className="text-slate-300 mb-1">
-                        <span className="text-slate-500 mr-2">Facility:</span>{" "}
-                        {booking.facility?.name}
-                      </p>
-                      <p className="text-slate-300 mb-1">
-                        <span className="text-slate-500 mr-2">Innovator:</span>{" "}
-                        {booking.user?.name}
-                      </p>
-                      {booking.feedback && (
-                        <div className="mt-3 p-3 bg-pink-900/10 border border-pink-900/30 rounded-lg relative group">
-                          <button 
-                            onClick={() => {
-                              const content = `Feedback Form\n\nBooking ID: ${booking._id}\nFacility: ${booking.facility?.name || 'N/A'}\nInnovator: ${booking.user?.name || 'N/A'}\nDate: ${new Date(booking.createdAt).toLocaleString()}\n\nFeedback Details:\n${booking.feedback}\n`;
-                              const blob = new Blob([content], { type: 'text/plain' });
-                              const url = URL.createObjectURL(blob);
-                              const a = document.createElement('a');
-                              a.href = url;
-                              a.download = `feedback_JOB-${booking._id.substring(18)}.txt`;
-                              document.body.appendChild(a);
-                              a.click();
-                              document.body.removeChild(a);
-                              URL.revokeObjectURL(url);
-                            }}
-                            className="absolute right-3 top-3 text-[10px] font-bold text-pink-500/70 hover:text-pink-400 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity"
-                          >
-                            <Download size={12} /> Download
-                          </button>
-                          <p className="text-[10px] font-bold text-pink-500 uppercase tracking-wider mb-1">Feedback Left:</p>
-                          <p className="text-sm italic text-slate-300 pr-20">"{booking.feedback}"</p>
-                        </div>
-                      )}
-                    </div>
+            {activeTab === 'completed' && (
+              <>
+                <h2 className="font-black text-lg mb-4 flex items-center gap-2 uppercase tracking-wider text-slate-300 border-b border-slate-800 pb-4">
+                  <Star size={18} className="text-indigo-400" /> Recently Completed Jobs (With Feedback)
+                </h2>
+                {completedBookings.length === 0 ? (
+                  <div className="p-8 text-center bg-slate-950 border border-slate-800 rounded-xl text-slate-500 font-mono text-sm">
+                    No completed bookings with feedback found.
                   </div>
-                ))}
-              </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {completedBookings.map((booking) => (
+                      <div
+                        key={booking._id}
+                        className="p-5 bg-slate-950 rounded-xl border border-slate-800 flex flex-col gap-3"
+                      >
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <h4 className="font-bold text-indigo-400 text-sm">
+                              Booking #{booking._id.substring(18)}
+                            </h4>
+                            <p className="text-xs text-slate-500 font-mono">
+                              {new Date(booking.createdAt).toLocaleString()}
+                            </p>
+                          </div>
+                          <span className="bg-emerald-900/30 text-emerald-400 border border-emerald-900/50 px-2 py-1 rounded text-[9px] font-black uppercase tracking-widest whitespace-nowrap">
+                            Completed
+                          </span>
+                        </div>
+                        <div className="text-sm">
+                          <p className="text-slate-300">
+                            <span className="text-slate-500 mr-2">Facility:</span>{" "}
+                            {booking.facility?.name}
+                          </p>
+                          <p className="text-slate-300">
+                            <span className="text-slate-500 mr-2">Innovator:</span>{" "}
+                            {booking.user?.name}
+                          </p>
+                          {booking.feedback && (
+                            <div className="mt-3 p-3 bg-pink-900/10 border border-pink-900/30 rounded-lg relative group">
+                              <button 
+                                onClick={() => {
+                                  const content = `Feedback Form\n\nBooking ID: ${booking._id}\nFacility: ${booking.facility?.name || 'N/A'}\nInnovator: ${booking.user?.name || 'N/A'}\nDate: ${new Date(booking.createdAt).toLocaleString()}\n\nFeedback Details:\n${booking.feedback}\n`;
+                                  const blob = new Blob([content], { type: 'text/plain' });
+                                  const url = URL.createObjectURL(blob);
+                                  const a = document.createElement('a');
+                                  a.href = url;
+                                  a.download = `feedback_JOB-${booking._id.substring(18)}.txt`;
+                                  document.body.appendChild(a);
+                                  a.click();
+                                  document.body.removeChild(a);
+                                  URL.revokeObjectURL(url);
+                                }}
+                                className="absolute right-3 top-3 text-[10px] font-bold text-pink-500/70 hover:text-pink-400 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                              >
+                                <Download size={12} /> Download
+                              </button>
+                              <p className="text-[10px] font-bold text-pink-500 uppercase tracking-wider mb-1">Feedback Left:</p>
+                              <p className="text-sm italic text-slate-300 pr-20">"{booking.feedback}"</p>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>
-      </div>
       {/* GLOBAL STYLES FOR ADMIN */}
       <style
         dangerouslySetInnerHTML={{
