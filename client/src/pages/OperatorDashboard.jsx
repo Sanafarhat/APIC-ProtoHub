@@ -21,7 +21,7 @@ const OperatorDashboard = () => {
 
   useEffect(() => {
     if (user && user.role === 'operator') {
-      fetch(`http://localhost:5000/api/bookings`)
+      fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/bookings`)
         .then(res => res.json())
         .then(data => {
           const sorted = data.sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -51,7 +51,7 @@ const OperatorDashboard = () => {
 
     // Persist to backend
     try {
-      await fetch(`http://localhost:5000/api/bookings/${id}/status`, {
+      await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/bookings/${id}/status`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: nextStatus })
@@ -67,7 +67,7 @@ const OperatorDashboard = () => {
     setBookings(bookings.map(b => b._id === id ? { ...b, status: 'rejected' } : b));
     showToast(`Job ${id.substring(0,6)} has been REJECTED`, 'warning');
     try {
-      await fetch(`http://localhost:5000/api/bookings/${id}/status`, {
+      await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/bookings/${id}/status`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: 'rejected' })

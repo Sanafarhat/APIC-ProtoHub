@@ -11,7 +11,7 @@ const TrackingPage = () => {
   useEffect(() => {
     const fetchBooking = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/bookings/${id}`);
+        const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/bookings/${id}`);
         if (!res.ok) throw new Error('Tracking ID not found');
         const data = await res.json();
         setBooking(data);

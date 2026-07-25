@@ -46,7 +46,7 @@ const AdminDashboard = () => {
     setBroadcastResult(null);
     try {
       const res = await fetch(
-        "http://localhost:5000/api/communications/broadcast",
+        `${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/communications/broadcast`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -71,7 +71,7 @@ const AdminDashboard = () => {
     const user = userString ? JSON.parse(userString) : null;
     if (user && user.role === "admin") {
       setIsAuthenticated(true);
-      fetch("http://localhost:5000/api/bookings")
+      fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/bookings`)
         .then((res) => res.json())
         .then((data) => {
           setPendingBookings(data.filter((b) => b.status === "pending_admin"));
@@ -84,7 +84,7 @@ const AdminDashboard = () => {
   const handleAdminApproval = async (id, newStatus) => {
     try {
       const res = await fetch(
-        `http://localhost:5000/api/bookings/${id}/status`,
+        `${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/bookings/${id}/status`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -120,7 +120,7 @@ const AdminDashboard = () => {
       );
       const firebaseUser = userCredential.user;
 
-      const res = await fetch("http://localhost:5000/api/auth/login", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: loginForm.email, uid: firebaseUser.uid }),

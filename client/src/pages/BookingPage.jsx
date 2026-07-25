@@ -30,7 +30,7 @@ const BookingPage = () => {
   const [orderAmount, setOrderAmount] = useState(0);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/facilities/${id}`)
+    fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/facilities/${id}`)
       .then(res => res.json())
       .then(data => {
         setFacility(data);
@@ -49,7 +49,7 @@ const BookingPage = () => {
       setAiAnalyzing(true);
       
       try {
-        const res = await fetch('http://localhost:5000/api/bookings/estimate-cost', {
+        const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/bookings/estimate-cost`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -87,7 +87,7 @@ const BookingPage = () => {
     setError('');
     setSelectedSlot('');
     try {
-      const res = await fetch(`http://localhost:5000/api/bookings/available-slots?facility=${facility._id}&date=${date}`);
+      const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/bookings/available-slots?facility=${facility._id}&date=${date}`);
       const data = await res.json();
       
       if (!res.ok) throw new Error(data.message || 'Failed to fetch slots');
@@ -188,7 +188,7 @@ const BookingPage = () => {
 
   const submitBooking = async (paymentId, totalCost, token, user) => {
     try {
-      const res = await fetch('http://localhost:5000/api/bookings', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/bookings`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',

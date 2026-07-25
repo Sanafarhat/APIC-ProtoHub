@@ -24,7 +24,7 @@ const FacilitiesPage = () => {
   const isAdmin = user?.role === 'admin';
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/facilities')
+    fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/facilities`)
       .then(async res => {
         if (!res.ok) throw new Error(`Server returned ${res.status}`);
         return res.json();
@@ -44,7 +44,7 @@ const FacilitiesPage = () => {
   const handleAddFacility = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch('http://localhost:5000/api/facilities', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/facilities`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newFacilityData)
@@ -66,7 +66,7 @@ const FacilitiesPage = () => {
   const handleDeleteFacility = async (id) => {
     if (!window.confirm('Are you sure you want to delete this facility?')) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/facilities/${id}`, { method: 'DELETE' });
+      const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/facilities/${id}`, { method: 'DELETE' });
       if (res.ok) {
         setFacilities(facilities.filter(f => f._id !== id));
       } else {

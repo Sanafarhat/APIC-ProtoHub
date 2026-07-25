@@ -36,7 +36,7 @@ const UserDashboard = () => {
 
   useEffect(() => {
     if (user) {
-      fetch(`http://localhost:5000/api/bookings?userId=${user.id}`)
+      fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/bookings?userId=${user.id}`)
         .then(res => res.json())
         .then(data => {
           const sorted = data.sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -99,7 +99,7 @@ const UserDashboard = () => {
       // Also save the detailed feedback to the booking itself so Admin and Operators can see it
       const bookingFeedbackText = `Rating: ${feedbackData.rating || 0}/5. Facility Quality: ${feedbackData.facilityQuality || 'Excellent'}. Timeliness: ${feedbackData.timeliness || 'On Time'}. ${feedbackData.comment ? 'Comments: ' + feedbackData.comment : ''}`;
       
-      const res = await fetch(`http://localhost:5000/api/bookings/${feedbackData.bookingId}/feedback`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/bookings/${feedbackData.bookingId}/feedback`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ feedback: bookingFeedbackText })
@@ -147,7 +147,7 @@ const UserDashboard = () => {
       // Simulate AI analysis delay
       setTimeout(async () => {
         try {
-          const res = await fetch('http://localhost:5000/api/bookings/estimate-cost', {
+          const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/bookings/estimate-cost`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ attachedFile: file.name, facility: 'AI Recommended: 5-Axis CNC', equipmentType: 'CNC', duration: 4 })
@@ -176,7 +176,7 @@ const UserDashboard = () => {
 
   const cancelBooking = async (id) => {
     try {
-      await fetch(`http://localhost:5000/api/bookings/${id}/status`, {
+      await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/bookings/${id}/status`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: 'cancelled' })
@@ -193,7 +193,7 @@ const UserDashboard = () => {
     showToast('Redirecting to secure payment gateway...', 'info');
     setTimeout(async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/bookings/${id}/status`, {
+        const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/bookings/${id}/status`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ status: 'in-progress' })
@@ -213,7 +213,7 @@ const UserDashboard = () => {
   const submitFeedback = async (id, feedbackText) => {
     if(!feedbackText.trim()) return showToast('Please enter feedback', 'danger');
     try {
-      const res = await fetch(`http://localhost:5000/api/bookings/${id}/feedback`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/bookings/${id}/feedback`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ feedback: feedbackText })
