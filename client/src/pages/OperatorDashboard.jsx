@@ -12,7 +12,25 @@ import './Dashboard.css';
 const OperatorDashboard = () => {
   const [bookings, setBookings] = useState([]);
   const [activeTab, setActiveTab] = useState('telemetry');
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(() => document.documentElement.classList.contains('dark'));
+
+  // Ensure theme sync on mount in case it was toggled elsewhere
+  useEffect(() => {
+    setIsDarkMode(document.documentElement.classList.contains('dark'));
+  }, []);
+
+  const toggleTheme = () => {
+    if (isDarkMode) {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+      setIsDarkMode(false);
+    } else {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+      setIsDarkMode(true);
+    }
+  };
+
   const [toast, setToast] = useState(null);
   const navigate = useNavigate();
 
@@ -108,7 +126,7 @@ const OperatorDashboard = () => {
         </div>
         
         <div className="flex items-center gap-4">
-           <button className={`p-2.5 rounded-full transition-transform hover:scale-110 active:scale-95 ${isDarkMode ? 'bg-slate-800 text-yellow-400 border border-slate-700' : 'bg-white text-slate-700 border border-slate-200 shadow-sm'}`} onClick={() => setIsDarkMode(!isDarkMode)}>
+           <button className={`p-2.5 rounded-full transition-transform hover:scale-110 active:scale-95 ${isDarkMode ? 'bg-slate-800 text-yellow-400 border border-slate-700' : 'bg-white text-slate-700 border border-slate-200 shadow-sm'}`} onClick={toggleTheme}>
              {isDarkMode ? <Sun size={20}/> : <Moon size={20}/>}
            </button>
            <div className="flex items-center gap-3 pl-4 border-l border-slate-200 dark:border-slate-700">

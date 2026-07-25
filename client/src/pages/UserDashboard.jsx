@@ -11,7 +11,24 @@ import './Dashboard.css';
 
 const UserDashboard = () => {
   const [bookings, setBookings] = useState([]);
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(() => document.documentElement.classList.contains('dark'));
+
+  // Ensure theme sync on mount in case it was toggled elsewhere
+  useEffect(() => {
+    setIsDarkMode(document.documentElement.classList.contains('dark'));
+  }, []);
+
+  const toggleTheme = () => {
+    if (isDarkMode) {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+      setIsDarkMode(false);
+    } else {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+      setIsDarkMode(true);
+    }
+  };
   const [hiddenWidgets, setHiddenWidgets] = useState([]);
   const [toast, setToast] = useState(null);
   const [filterStatus, setFilterStatus] = useState(null);
@@ -255,7 +272,7 @@ const UserDashboard = () => {
             <span className="flex items-center gap-2"><CheckCircle size={16} className="text-green-500"/> {completedBookings.length} Completed</span>
           </div>
           <div className="flex gap-3">
-            <button className={`p-2.5 rounded-full transition-transform hover:scale-110 active:scale-95 ${isDarkMode ? 'bg-slate-800 hover:bg-slate-700 text-yellow-400 border border-slate-700' : 'bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 shadow-sm'}`} onClick={() => setIsDarkMode(!isDarkMode)}>
+            <button className={`p-2.5 rounded-full transition-transform hover:scale-110 active:scale-95 ${isDarkMode ? 'bg-slate-800 hover:bg-slate-700 text-yellow-400 border border-slate-700' : 'bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 shadow-sm'}`} onClick={toggleTheme}>
               {isDarkMode ? <Sun size={20}/> : <Moon size={20}/>}
             </button>
             <div className="relative group">
