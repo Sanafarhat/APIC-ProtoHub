@@ -102,7 +102,7 @@ const OperatorDashboard = () => {
             <Cpu size={24} />
           </div>
           <div>
-            <h1 className="text-2xl font-black tracking-tight text-slate-900 dark:text-white">APIC Operations <span className="text-indigo-500">ERP</span></h1>
+            <h1 className={`text-2xl font-black tracking-tight ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>APIC Operations <span className="text-indigo-500">ERP</span></h1>
             <p className={`${textMuted} text-sm font-bold uppercase tracking-widest`}>Facility Control Center</p>
           </div>
         </div>
