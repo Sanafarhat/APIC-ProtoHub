@@ -305,7 +305,7 @@ const UserDashboard = () => {
             <input type="file" ref={fileInputRef} className="hidden" multiple onChange={handleFileUpload} />
             <button className={`flex flex-col items-center justify-center gap-2 p-3 rounded-xl font-semibold transition-all duration-300 group hover:-translate-y-1 hover:shadow-md ${isDarkMode?'bg-slate-800 border border-slate-700 hover:border-slate-500 text-slate-200':'bg-white border border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-700'}`} onClick={() => fileInputRef.current.click()}>
               <UploadCloud size={20} className="text-blue-500"/>
-              <span className="text-[10px] text-center uppercase tracking-wider">CAD Upload</span>
+              <span className="text-[10px] text-center uppercase tracking-wider">CAD / Doc Upload</span>
             </button>
             <button className={`flex flex-col items-center justify-center gap-2 p-3 rounded-xl font-semibold transition-all duration-300 group hover:-translate-y-1 hover:shadow-md ${isDarkMode?'bg-slate-800 border border-slate-700 hover:border-slate-500 text-slate-200':'bg-white border border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-700'}`} onClick={() => navigate('/facilities', { state: { initialViewMode: 'map' } })}>
               <Map size={20} className="text-emerald-500"/>
