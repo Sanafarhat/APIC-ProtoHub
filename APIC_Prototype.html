@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APIC ProtoHub</title>
+    
+    <!-- Fonts: Inter (Closest free alternative to Anthropic Sans), Segoe UI fallback -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons: FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: '#534AB7',     // Primary Accent (Purple)
+                        success: '#3B6D11',   // Success (Green)
+                        warning: '#BA7517',   // Warning (Amber)
+                        danger: '#A32D2D',    // Danger (Red)
+                        neutral: '#888780',   // Neutral (Gray)
+                        pagebg: '#F7F7F9'     // Light Gray Pages
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Segoe UI', 'sans-serif'],
+                    },
+                    fontSize: {
+                        'body': '15px',
+                        'label': '13px',
+                        'h3': '18px',
+                        'h2': '22px',
+                        'h1': '28px',
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.3s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Base typography enforcements */
+        body { font-size: 15px; background-color: #F7F7F9; color: #1f2937; }
+        h1 { font-size: 28px; font-weight: 700; }
+        h2 { font-size: 22px; font-weight: 700; }
+        h3 { font-size: 18px; font-weight: 500; }
+        .text-label { font-size: 13px; }
+        
+        /* Hide scrollbar for cleaner UI */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        
+        /* View transition helper */
+        .view-section { display: none; }
+        .view-section.active { display: block; animation: fadeIn 0.4s ease-out; }
+        
+        /* Map mock pattern */
+        .bg-map-pattern {
+            background-color: #e2e8f0;
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased text-gray-800 flex flex-col min-h-screen">
+
+    <!-- Navigation Bar -->
+    <nav id="main-nav" class="bg-white border-b border-gray-200 sticky top-0 z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <!-- Logo -->
+                <div class="flex items-center cursor-pointer" onclick="app.navigate('home')">
+                    <div class="w-8 h-8 bg-brand rounded flex items-center justify-center text-white mr-2">
+                        <i class="fa-solid fa-cube"></i>
+                    </div>
+                    <span class="font-bold text-xl tracking-tight text-gray-900">APIC <span class="text-brand">ProtoHub</span></span>
+                </div>
+                
+                <!-- Desktop Nav & Auth grouped to the right -->
+                <div class="hidden md:flex items-center space-x-6 lg:space-x-8 ml-auto">
+                    <button onclick="app.navigate('home')" class="text-neutral hover:text-brand font-medium transition-colors">Home</button>
+                    <button onclick="app.navigate('facilities')" class="text-neutral hover:text-brand font-medium transition-colors">Facilities</button>
+                    <button onclick="app.showModal('Contact our support team at support@apic-protohub.in')" class="text-neutral hover:text-brand font-medium transition-colors">Contact Us</button>
+                    
+                    <!-- Auth CTA -->
+                    <div id="nav-auth-section" class="pl-2 lg:pl-4 border-l border-gray-200">
+                        <button onclick="app.navigate('login')" class="bg-brand text-white px-5 py-2 rounded font-medium hover:bg-opacity-90 transition shadow-sm">
+                            Login / Register
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button class="text-gray-600 hover:text-gray-900 focus:outline-none p-2">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow relative">
+        
+        <!-- ================= VIEW: HOME ================= -->
+        <section id="view-home" class="view-section active w-full">
+            <!-- Hero Section -->
+            <div class="bg-white border-b border-gray-200 py-16 md:py-24">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4 tracking-tight">Empower Your <span class="text-brand">Innovations</span></h1>
+                    <p class="text-lg text-neutral max-w-2xl mx-auto mb-8">
+                        The unified digital platform for APIC centers. Discover state-of-the-art facilities, book equipment instantly, and track your prototype development seamlessly.
+                    </p>
+                    <div class="flex flex-col sm:flex-row justify-center gap-4">
+                        <button onclick="app.navigate('facilities')" class="bg-brand text-white px-8 py-3 rounded font-medium hover:bg-opacity-90 transition shadow-md flex items-center justify-center">
+                            Explore Now <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </button>
+                        <button onclick="app.navigate('login')" class="bg-white border-2 border-brand text-brand px-8 py-3 rounded font-medium hover:bg-gray-50 transition shadow-sm">
+                            Get Started
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Stats Section -->
+            <div class="bg-brand text-white py-8">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center divide-x divide-white/20">
+                        <div><div class="text-3xl font-bold mb-1">50+</div><div class="text-label opacity-80 uppercase">Facilities</div></div>
+                        <div><div class="text-3xl font-bold mb-1">1000+</div><div class="text-label opacity-80 uppercase">Active Users</div></div>
+                        <div><div class="text-3xl font-bold mb-1">750+</div><div class="text-label opacity-80 uppercase">Prototypes</div></div>
+                        <div><div class="text-3xl font-bold mb-1">26</div><div class="text-label opacity-80 uppercase">Districts Covered</div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Key Features -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                <div class="text-center mb-12">
+                    <h2 class="text-gray-900 mb-2">Prototyping as a Service</h2>
+                    <p class="text-neutral">Everything you need to turn ideas into physical products.</p>
+                </div>
+                
+                <div class="grid md:grid-cols-3 gap-8">
+                    <!-- Feature 1 -->
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center hover:shadow-md transition">
+                        <div class="w-14 h-14 bg-brand/10 text-brand rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+                            <i class="fa-solid fa-magnifying-glass-location"></i>
+                        </div>
+                        <h3 class="mb-2 text-gray-900">Discover</h3>
+                        <p class="text-neutral text-sm">Find the exact machinery and expertise you need across all APIC centers in Andhra Pradesh.</p>
+                    </div>
+                    <!-- Feature 2 -->
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center hover:shadow-md transition">
+                        <div class="w-14 h-14 bg-brand/10 text-brand rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+                            <i class="fa-solid fa-calendar-check"></i>
+                        </div>
+                        <h3 class="mb-2 text-gray-900">Book</h3>
+                        <p class="text-neutral text-sm">View real-time availability, get instant cost estimates, and reserve your time slot securely.</p>
+                    </div>
+                    <!-- Feature 3 -->
+                    <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center hover:shadow-md transition">
+                        <div class="w-14 h-14 bg-brand/10 text-brand rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+                            <i class="fa-solid fa-route"></i>
+                        </div>
+                        <h3 class="mb-2 text-gray-900">Track</h3>
+                        <p class="text-neutral text-sm">Monitor your fabrication progress live, communicate with operators, and arrange delivery.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- How It Works (4 Steps) -->
+            <div class="bg-white border-t border-gray-200 py-16">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <h2 class="text-center text-gray-900 mb-12">How It Works</h2>
+                    <div class="flex flex-col md:flex-row justify-between items-start relative">
+                        <!-- Connecting Line -->
+                        <div class="hidden md:block absolute top-6 left-[10%] right-[10%] h-0.5 bg-gray-200 z-0"></div>
+                        
+                        <div class="flex-1 text-center relative z-10 px-4 mb-8 md:mb-0">
+                            <div class="w-12 h-12 bg-brand text-white rounded-full flex items-center justify-center mx-auto mb-4 font-bold text-lg shadow-md border-4 border-white">1</div>
+                            <h4 class="font-bold text-gray-900 text-sm mb-1">Upload CAD</h4>
+                            <p class="text-label text-neutral">Submit your design requirements</p>
+                        </div>
+                        <div class="flex-1 text-center relative z-10 px-4 mb-8 md:mb-0">
+                            <div class="w-12 h-12 bg-white text-brand border border-gray-300 rounded-full flex items-center justify-center mx-auto mb-4 font-bold text-lg shadow-sm">2</div>
+                            <h4 class="font-bold text-gray-900 text-sm mb-1">Get AI Quote</h4>
+                            <p class="text-label text-neutral">Instant estimation & matching</p>
+                        </div>
+                        <div class="flex-1 text-center relative z-10 px-4 mb-8 md:mb-0">
+                            <div class="w-12 h-12 bg-white text-brand border border-gray-300 rounded-full flex items-center justify-center mx-auto mb-4 font-bold text-lg shadow-sm">3</div>
+                            <h4 class="font-bold text-gray-900 text-sm mb-1">Book & Pay</h4>
+                            <p class="text-label text-neutral">Secure your facility slot</p>
+                        </div>
+                        <div class="flex-1 text-center relative z-10 px-4">
+                            <div class="w-12 h-12 bg-white text-brand border border-gray-300 rounded-full flex items-center justify-center mx-auto mb-4 font-bold text-lg shadow-sm">4</div>
+                            <h4 class="font-bold text-gray-900 text-sm mb-1">Fabricate</h4>
+                            <p class="text-label text-neutral">Live tracking to completion</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= VIEW: LOGIN ================= -->
+        <section id="view-login" class="view-section w-full min-h-screen bg-white">
+            <div class="flex min-h-screen">
+                <!-- Left Brand Section (Hidden on Mobile) -->
+                <div class="hidden md:flex md:w-1/2 bg-brand p-12 flex-col justify-between relative overflow-hidden">
+                    <!-- Background Decoration -->
+                    <div class="absolute -bottom-32 -left-32 w-96 h-96 bg-white opacity-5 rounded-full blur-3xl"></div>
+                    <div class="absolute top-10 -right-10 w-64 h-64 bg-white opacity-10 rounded-full blur-2xl"></div>
+                    
+                    <div class="relative z-10">
+                        <div class="flex items-center cursor-pointer text-white mb-12" onclick="app.navigate('home')">
+                            <i class="fa-solid fa-cube text-3xl mr-3"></i>
+                            <span class="font-bold text-2xl tracking-tight">APIC ProtoHub</span>
+                        </div>
+                        <h1 class="text-white mb-4 text-4xl">Welcome Back</h1>
+                        <p class="text-brand-100 text-lg opacity-80 mb-8 max-w-md">Access your prototyping workspace, manage bookings, and track jobs in real-time.</p>
+                        
+                        <ul class="space-y-4 text-white/90">
+                            <li class="flex items-center"><i class="fa-solid fa-check-circle text-success mr-3"></i> Seamless Equipment Booking</li>
+                            <li class="flex items-center"><i class="fa-solid fa-check-circle text-success mr-3"></i> AI-Powered Cost Estimation</li>
+                            <li class="flex items-center"><i class="fa-solid fa-check-circle text-success mr-3"></i> Statewide Facility Access</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="relative z-10 mt-auto pt-12 border-t border-white/20 flex gap-8">
+                        <div><div class="text-2xl font-bold text-white">50+</div><div class="text-label text-white/70 uppercase">Facilities</div></div>
+                        <div><div class="text-2xl font-bold text-white">750+</div><div class="text-label text-white/70 uppercase">Prototypes</div></div>
+                    </div>
+                </div>
+                
+                <!-- Right Login Form -->
+                <div class="w-full md:w-1/2 flex items-center justify-center p-8 bg-pagebg relative">
+                    <!-- Back button for prototype navigation -->
+                    <button onclick="app.navigate('home')" class="absolute top-6 left-6 text-neutral hover:text-gray-900 transition flex items-center">
+                        <i class="fa-solid fa-arrow-left mr-2"></i> Back to Home
+                    </button>
+                    
+                    <div class="w-full max-w-lg">
+                        
+                        <div id="login-role-selection" class="bg-white p-8 rounded-xl shadow-sm border border-gray-200">
+                            <div class="text-center mb-8">
+                                <h2 class="text-gray-900 mb-1">Welcome to ProtoHub</h2>
+                                <p class="text-neutral text-sm">Please select your account type to continue</p>
+                            </div>
+                            
+                            <div class="grid gap-4 sm:grid-cols-2">
+                                <!-- Innovator Card -->
+                                <button onclick="app.selectRole('innovator')" class="flex flex-col items-center text-center p-6 border-2 border-gray-200 rounded-xl hover:border-brand hover:bg-brand/5 transition group focus:outline-none">
+                                    <div class="w-14 h-14 bg-gray-100 group-hover:bg-brand text-gray-500 group-hover:text-white rounded-full flex items-center justify-center text-2xl mb-4 transition-colors">
+                                        <i class="fa-solid fa-lightbulb"></i>
+                                    </div>
+                                    <h3 class="text-gray-900 font-bold mb-1">Innovator</h3>
+                                    <p class="text-xs text-neutral">Book facilities, get quotes, and track prototypes.</p>
+                                </button>
+                                
+                                <!-- Admin Card -->
+                                <button onclick="app.selectRole('admin')" class="flex flex-col items-center text-center p-6 border-2 border-gray-200 rounded-xl hover:border-brand hover:bg-brand/5 transition group focus:outline-none">
+                                    <div class="w-14 h-14 bg-gray-100 group-hover:bg-brand text-gray-500 group-hover:text-white rounded-full flex items-center justify-center text-2xl mb-4 transition-colors">
+                                        <i class="fa-solid fa-clipboard-check"></i>
+                                    </div>
+                                    <h3 class="text-gray-900 font-bold mb-1">Facility Admin</h3>
+                                    <p class="text-xs text-neutral">Manage operations, bookings, and equipment.</p>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="login-form-container" class="hidden bg-white p-8 rounded-xl shadow-sm border border-gray-200">
+                            <div class="flex items-center mb-6">
+                                <button type="button" onclick="app.resetLogin()" class="text-neutral hover:text-brand mr-3 focus:outline-none"><i class="fa-solid fa-arrow-left text-lg"></i></button>
+                                <div>
+                                    <h2 id="login-title-text" class="text-gray-900 text-xl font-bold mb-0">Sign In</h2>
+                                    <p class="text-neutral text-xs m-0">Enter your details to access the platform</p>
+                                </div>
+                            </div>
+                            
+                            <form id="login-form" onsubmit="app.handleLogin(event)">
+                                <div class="mb-4">
+                                    <label class="block text-label font-medium text-gray-700 mb-1" for="email">Email Address</label>
+                                    <input type="email" id="email" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent transition" placeholder="user@example.com" required>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <div class="flex justify-between items-center mb-1">
+                                        <label class="block text-label font-medium text-gray-700" for="password">Password</label>
+                                        <a href="#" class="text-label text-brand hover:underline">Forgot password?</a>
+                                    </div>
+                                    <input type="password" id="password" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent transition" placeholder="••••••••" required>
+                                </div>
+                                
+                                <div class="flex items-center mb-6">
+                                    <input type="checkbox" id="remember" class="w-4 h-4 text-brand bg-gray-100 border-gray-300 rounded focus:ring-brand">
+                                    <label for="remember" class="ml-2 text-sm text-gray-600">Remember me for 30 days</label>
+                                </div>
+                                
+                                <button type="submit" class="w-full bg-brand text-white py-2.5 rounded font-medium hover:bg-opacity-90 transition shadow-sm mb-4">
+                                    Sign In
+                                </button>
+                                
+                                <div class="relative flex py-2 items-center mb-4">
+                                    <div class="flex-grow border-t border-gray-200"></div>
+                                    <span class="flex-shrink-0 mx-4 text-neutral text-sm">Or continue with</span>
+                                    <div class="flex-grow border-t border-gray-200"></div>
+                                </div>
+                                
+                                <button type="button" class="w-full bg-white border border-gray-300 text-gray-700 py-2.5 rounded font-medium hover:bg-gray-50 transition shadow-sm flex items-center justify-center gap-2">
+                                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" class="w-5 h-5">
+                                    Sign in with Google
+                                </button>
+                            </form>
+                            
+                            <p class="text-center text-sm text-neutral mt-8">
+                                Don't have an account? <a href="#" class="text-brand font-medium hover:underline">Sign up for free</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= VIEW: FACILITIES ================= -->
+        <section id="view-facilities" class="view-section w-full py-8 bg-[#f8fafc]">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <!-- Search & Filter Bar -->
+                <div class="mb-2">
+                    <h2 class="text-gray-900 text-lg mb-3 font-bold">Search Facilities</h2>
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex flex-col md:flex-row gap-4">
+                        <div class="flex-1 relative">
+                            <input type="text" id="search-input" onkeyup="app.renderFacilities()" placeholder="Find what you need..." class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:ring-blue-600 focus:border-blue-600 text-sm outline-none transition">
+                        </div>
+                        <select id="filter-location" onchange="app.renderFacilities()" class="border border-gray-200 rounded-lg px-4 py-2.5 bg-gray-50 focus:ring-blue-600 focus:border-blue-600 text-gray-700 text-sm md:w-56 outline-none transition">
+                            <option value="">All Locations</option>
+                            <option value="hyd">Hyderabad</option>
+                            <option value="vizag">Visakhapatnam</option>
+                        </select>
+                        <select id="filter-type" onchange="app.renderFacilities()" class="border border-gray-200 rounded-lg px-4 py-2.5 bg-gray-50 focus:ring-blue-600 focus:border-blue-600 text-gray-700 text-sm md:w-56 outline-none transition">
+                            <option value="">All Equipment Types</option>
+                            <option value="3d">3D Printers</option>
+                            <option value="cnc">CNC Machines</option>
+                            <option value="pcb">PCB Assembly</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center mt-8 mb-4">
+                    <h2 class="text-gray-900 text-lg font-bold">Available Facilities</h2>
+                    <div class="flex bg-white rounded-lg border border-gray-200 overflow-hidden text-sm">
+                        <button class="bg-[#0f172a] text-white px-5 py-1.5 font-medium transition">List View</button>
+                        <button class="bg-white text-gray-700 px-5 py-1.5 font-medium hover:bg-gray-50 transition">Map View</button>
+                    </div>
+                </div>
+
+                <!-- Grid layout for facilities -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="facilities-list-container">
+                    <!-- Dynamic Facility Cards will be injected here via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= VIEW: BOOKING DETAILS ================= -->
+        <section id="view-booking" class="view-section w-full py-8 bg-[#f8fafc]">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <button onclick="app.navigate('facilities')" class="text-blue-600 hover:text-blue-800 transition flex items-center mb-6 text-sm font-medium">
+                    <i class="fa-solid fa-arrow-left mr-2"></i> Back to Facilities
+                </button>
+                
+                <div class="flex flex-col lg:flex-row gap-6">
+                    <!-- Left Column -->
+                    <div class="lg:w-[65%]">
+                        <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-200 mb-6" id="booking-left-panel">
+                            <!-- Dynamic Left Content Injected via JS -->
+                        </div>
+                    </div>
+                    
+                    <!-- Right Column -->
+                    <div class="lg:w-[35%]">
+                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 sticky top-24">
+                            <h3 class="font-bold text-gray-900 mb-6 text-lg">Booking Summary</h3>
+                            
+                            <div class="space-y-4 mb-6 text-sm" id="booking-summary-details">
+                                <!-- Dynamic Summary Details injected here -->
+                            </div>
+                            
+                            <hr class="border-gray-100 my-4">
+                            
+                            <div class="space-y-3 mb-6 text-sm">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-500">Base Rate (<span id="calc-rate-text">₹0 x 0</span>)</span>
+                                    <span class="font-medium text-gray-900">₹<span id="calc-subtotal">0</span></span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-500">Taxes & Fees</span>
+                                    <span class="font-medium text-gray-900">₹<span id="calc-tax">0</span></span>
+                                </div>
+                            </div>
+                            
+                            <hr class="border-gray-100 my-4">
+                            
+                            <div class="flex justify-between items-center mb-8">
+                                <span class="font-bold text-gray-900 text-base">Total Amount</span>
+                                <span class="font-bold text-blue-600 text-xl">₹<span id="calc-total">0</span></span>
+                            </div>
+                            
+                            <button onclick="app.processBooking()" class="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition shadow-sm">
+                                Confirm & Pay
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= VIEW: USER DASHBOARD ================= -->
+        <section id="view-user-dashboard" class="view-section w-full py-8">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="flex justify-between items-center mb-8">
+                    <div>
+                        <h1 class="text-gray-900 mb-1">Innovator Dashboard</h1>
+                        <p class="text-neutral text-sm">Welcome back, Sarah. Here's your prototyping overview.</p>
+                    </div>
+                    <div class="hidden md:flex gap-3">
+                        <button class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded text-sm hover:bg-gray-50 transition"><i class="fa-regular fa-calendar mr-2"></i>Calendar</button>
+                        <button onclick="app.navigate('facilities')" class="bg-brand text-white px-4 py-2 rounded text-sm font-medium hover:bg-opacity-90 transition shadow-sm"><i class="fa-solid fa-plus mr-2"></i>New Booking</button>
+                    </div>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                    <div class="bg-white p-5 rounded shadow-sm border border-gray-200">
+                        <div class="text-neutral text-label mb-1">Total Bookings</div>
+                        <div class="text-2xl font-bold text-gray-900">12</div>
+                    </div>
+                    <div class="bg-white p-5 rounded shadow-sm border border-gray-200">
+                        <div class="text-neutral text-label mb-1">Amount Spent</div>
+                        <div class="text-2xl font-bold text-gray-900">₹14,500</div>
+                    </div>
+                    <div class="bg-white p-5 rounded shadow-sm border border-gray-200">
+                        <div class="text-neutral text-label mb-1">Favorite Facility</div>
+                        <div class="text-lg font-bold text-gray-900 truncate" title="Vizag Hub">Vizag Hub</div>
+                    </div>
+                    <div class="bg-white p-5 rounded shadow-sm border-brand border-2 bg-brand/5 relative overflow-hidden">
+                        <div class="absolute -right-4 -bottom-4 text-brand/20 text-6xl"><i class="fa-solid fa-crown"></i></div>
+                        <div class="text-brand font-medium text-label mb-1 relative z-10">Membership</div>
+                        <div class="text-xl font-bold text-gray-900 relative z-10">Pro Start-up</div>
+                    </div>
+                </div>
+
+                <div class="grid lg:grid-cols-3 gap-8">
+                    <!-- Left Column: Bookings (2/3) -->
+                    <div class="lg:col-span-2 space-y-8">
+                        
+                        <!-- Current Bookings / Active Jobs -->
+                        <div class="bg-white rounded shadow-sm border border-gray-200 overflow-hidden">
+                            <div class="bg-gray-50 border-b border-gray-200 px-6 py-4 flex justify-between items-center">
+                                <h3 class="text-gray-900 m-0"><i class="fa-solid fa-spinner animate-spin text-brand mr-2"></i> Current Jobs</h3>
+                            </div>
+                            <div class="p-6" id="dashboard-active-jobs">
+                                <!-- Active jobs injected dynamically -->
+                            </div>
+                        </div>
+
+                        <!-- Upcoming Bookings -->
+                        <div class="bg-white rounded shadow-sm border border-gray-200 overflow-hidden">
+                            <div class="bg-gray-50 border-b border-gray-200 px-6 py-4">
+                                <h3 class="text-gray-900 m-0">Upcoming Bookings</h3>
+                            </div>
+                            <div class="divide-y divide-gray-100" id="dashboard-upcoming-jobs">
+                                <!-- Upcoming jobs injected dynamically -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Recent Activity & Links (1/3) -->
+                    <div class="space-y-8">
+                        <div class="bg-white rounded shadow-sm border border-gray-200 p-6">
+                            <h3 class="text-gray-900 mb-4 border-b border-gray-100 pb-2">Recent Activity</h3>
+                            <div class="relative border-l border-gray-200 ml-3 space-y-6 pb-2">
+                                <div class="relative pl-6">
+                                    <div class="absolute -left-1.5 top-1 w-3 h-3 bg-brand rounded-full ring-4 ring-white"></div>
+                                    <div class="text-sm font-medium text-gray-900">Job #JOB-9921 Started</div>
+                                    <div class="text-xs text-neutral">Today, 09:05 AM</div>
+                                </div>
+                                <div class="relative pl-6">
+                                    <div class="absolute -left-1.5 top-1 w-3 h-3 bg-gray-300 rounded-full ring-4 ring-white"></div>
+                                    <div class="text-sm font-medium text-gray-900">Payment Successful (₹2006)</div>
+                                    <div class="text-xs text-neutral">Yesterday, 14:20 PM</div>
+                                </div>
+                                <div class="relative pl-6">
+                                    <div class="absolute -left-1.5 top-1 w-3 h-3 bg-success rounded-full ring-4 ring-white"></div>
+                                    <div class="text-sm font-medium text-gray-900">Job #JOB-9850 Completed</div>
+                                    <div class="text-xs text-neutral">Jul 18, 16:45 PM</div>
+                                </div>
+                            </div>
+                            <button class="w-full text-center text-sm text-brand font-medium mt-4 hover:underline">View All History</button>
+                        </div>
+                        
+                        <div class="bg-white rounded shadow-sm border border-gray-200 p-6">
+                            <h3 class="text-gray-900 mb-4 border-b border-gray-100 pb-2">Quick Links</h3>
+                            <ul class="space-y-3 text-sm">
+                                <li><a href="#" class="text-gray-700 hover:text-brand flex items-center"><i class="fa-regular fa-folder-open w-6 text-neutral"></i> My CAD Files</a></li>
+                                <li><a href="#" class="text-gray-700 hover:text-brand flex items-center"><i class="fa-solid fa-file-invoice w-6 text-neutral"></i> Invoices & Billing</a></li>
+                                <li><a href="#" class="text-gray-700 hover:text-brand flex items-center"><i class="fa-solid fa-headset w-6 text-neutral"></i> Contact Support</a></li>
+                                <li><a href="#" class="text-gray-700 hover:text-brand flex items-center"><i class="fa-solid fa-gear w-6 text-neutral"></i> Account Settings</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= VIEW: OPERATOR DASHBOARD ================= -->
+        <section id="view-operator-dashboard" class="view-section w-full py-8 bg-gray-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="flex justify-between items-center mb-6 border-b border-gray-200 pb-4">
+                    <div>
+                        <h1 class="text-gray-900 mb-1">Facility Operator Console</h1>
+                        <p class="text-neutral text-sm">Location: Vizag Hub • Role: Lead Technician</p>
+                    </div>
+                    <div class="flex items-center gap-3 bg-white p-2 border border-gray-200 rounded shadow-sm">
+                        <span class="text-sm text-gray-600">Facility Status:</span>
+                        <span class="flex items-center text-sm font-bold text-success"><div class="w-2 h-2 bg-success rounded-full mr-1 animate-pulse"></div> Online</span>
+                    </div>
+                </div>
+
+                <!-- Today's Overview Stats -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                    <div class="bg-white p-4 rounded shadow-sm border-l-4 border-brand">
+                        <div class="text-neutral text-xs font-bold uppercase mb-1">Active Bookings (Today)</div>
+                        <div class="text-2xl font-bold text-gray-900">8 / 12</div>
+                    </div>
+                    <div class="bg-white p-4 rounded shadow-sm border-l-4 border-success">
+                        <div class="text-neutral text-xs font-bold uppercase mb-1">Utilization %</div>
+                        <div class="text-2xl font-bold text-gray-900">76%</div>
+                    </div>
+                    <div class="bg-white p-4 rounded shadow-sm border-l-4 border-warning">
+                        <div class="text-neutral text-xs font-bold uppercase mb-1">Pending Maintenance</div>
+                        <div class="text-2xl font-bold text-gray-900">2 Items</div>
+                    </div>
+                    <div class="bg-white p-4 rounded shadow-sm border-l-4 border-neutral">
+                        <div class="text-neutral text-xs font-bold uppercase mb-1">Est. Revenue (Today)</div>
+                        <div class="text-2xl font-bold text-gray-900">₹24,500</div>
+                    </div>
+                </div>
+
+                <div class="grid lg:grid-cols-3 gap-6">
+                    <!-- Schedule Grid (2/3) -->
+                    <div class="lg:col-span-2">
+                        <div class="bg-white rounded shadow-sm border border-gray-200 mb-6">
+                            <div class="bg-gray-50 border-b border-gray-200 px-4 py-3 flex justify-between items-center">
+                                <h3 class="text-gray-900 text-base m-0">Today's Schedule</h3>
+                                <div class="text-sm text-brand font-medium cursor-pointer"><i class="fa-solid fa-download mr-1"></i> Export</div>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-sm text-left">
+                                    <thead class="bg-gray-50 text-gray-600 border-b border-gray-200">
+                                        <tr>
+                                            <th class="px-4 py-3 font-medium">Time Slot</th>
+                                            <th class="px-4 py-3 font-medium">Machine</th>
+                                            <th class="px-4 py-3 font-medium">Customer/Job ID</th>
+                                            <th class="px-4 py-3 font-medium">Status</th>
+                                            <th class="px-4 py-3 font-medium text-right">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-100">
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="px-4 py-3 font-medium">09:00 - 13:00</td>
+                                            <td class="px-4 py-3">3D Printer 1 (Stratasys)</td>
+                                            <td class="px-4 py-3">Sarah J. <br><span class="text-xs text-neutral">#JOB-9921</span></td>
+                                            <td class="px-4 py-3"><span class="bg-warning/10 text-warning px-2 py-1 rounded text-xs border border-warning/20">In Progress</span></td>
+                                            <td class="px-4 py-3 text-right"><button class="text-brand hover:underline">Manage</button></td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50 bg-success/5">
+                                            <td class="px-4 py-3 font-medium">10:00 - 11:00</td>
+                                            <td class="px-4 py-3">Laser Cutter (Epilog)</td>
+                                            <td class="px-4 py-3">Tech Innovators <br><span class="text-xs text-neutral">#JOB-9922</span></td>
+                                            <td class="px-4 py-3"><span class="bg-success/10 text-success px-2 py-1 rounded text-xs border border-success/20">Completed</span></td>
+                                            <td class="px-4 py-3 text-right"><button class="text-neutral hover:underline">Review</button></td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="px-4 py-3 font-medium">14:00 - 18:00</td>
+                                            <td class="px-4 py-3">CNC Mill (Haas)</td>
+                                            <td class="px-4 py-3">Ravi K. <br><span class="text-xs text-neutral">#JOB-9925</span></td>
+                                            <td class="px-4 py-3"><span class="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs border border-gray-200">Scheduled</span></td>
+                                            <td class="px-4 py-3 text-right"><button class="text-brand hover:underline">Prepare</button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Equipment Status & Alerts -->
+                    <div>
+                        <!-- Alerts -->
+                        <div class="bg-white rounded shadow-sm border border-gray-200 mb-6 border-t-4 border-t-warning">
+                            <div class="px-4 py-3 border-b border-gray-100 flex justify-between items-center">
+                                <h3 class="text-gray-900 text-base m-0 text-warning"><i class="fa-solid fa-bell mr-1"></i> Alerts</h3>
+                                <span class="bg-warning/20 text-warning text-xs px-2 py-0.5 rounded-full font-bold">2</span>
+                            </div>
+                            <div class="p-4 space-y-3 text-sm">
+                                <div class="bg-warning/5 border border-warning/20 p-3 rounded text-gray-800">
+                                    <strong class="block mb-1">Material Stock Low</strong>
+                                    Resin Type A for 3D Printer 2 is below 15% capacity. <a href="#" class="text-warning underline mt-1 block">Reorder now</a>
+                                </div>
+                                <div class="bg-danger/5 border border-danger/20 p-3 rounded text-gray-800">
+                                    <strong class="block mb-1 text-danger">Maintenance Due</strong>
+                                    CNC Mill routine lubrication overdue by 12 hours.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Equipment Status -->
+                        <div class="bg-white rounded shadow-sm border border-gray-200">
+                            <div class="bg-gray-50 border-b border-gray-200 px-4 py-3">
+                                <h3 class="text-gray-900 text-base m-0">Equipment Status</h3>
+                            </div>
+                            <div class="p-4 space-y-4">
+                                <div class="flex justify-between items-center">
+                                    <div class="flex items-center">
+                                        <div class="w-3 h-3 bg-success rounded-full mr-2 shadow"></div>
+                                        <span class="text-sm font-medium">3D Printer 1</span>
+                                    </div>
+                                    <span class="text-xs text-neutral">Running (65%)</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <div class="flex items-center">
+                                        <div class="w-3 h-3 bg-gray-300 rounded-full mr-2 shadow"></div>
+                                        <span class="text-sm font-medium">3D Printer 2</span>
+                                    </div>
+                                    <span class="text-xs text-neutral">Idle</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <div class="flex items-center">
+                                        <div class="w-3 h-3 bg-danger rounded-full mr-2 shadow animate-pulse"></div>
+                                        <span class="text-sm font-medium">Laser Cutter</span>
+                                    </div>
+                                    <span class="text-xs text-danger font-medium">Offline/Maint.</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <div class="flex items-center">
+                                        <div class="w-3 h-3 bg-gray-300 rounded-full mr-2 shadow"></div>
+                                        <span class="text-sm font-medium">CNC Mill</span>
+                                    </div>
+                                    <span class="text-xs text-neutral">Prep Required</span>
+                                </div>
+                            </div>
+                            <div class="px-4 py-3 border-t border-gray-100 text-center">
+                                <button class="text-sm text-brand font-medium hover:underline">View Detailed Telemetry</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modal Notification Component (To avoid native alerts) -->
+    <div id="app-modal" class="fixed inset-0 bg-gray-900/50 hidden flex items-center justify-center z-[100] opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-lg p-6 max-w-sm w-full mx-4 shadow-2xl transform scale-95 transition-transform duration-300" id="app-modal-content">
+            <div class="text-center">
+                <div class="w-16 h-16 bg-success/20 text-success rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">
+                    <i class="fa-solid fa-check"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">Success</h3>
+                <p id="app-modal-text" class="text-neutral mb-6">Action completed successfully.</p>
+                <button onclick="app.closeModal()" class="w-full bg-brand text-white py-2 rounded font-medium hover:bg-opacity-90">
+                    Continue
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const app = {
+            currentView: 'home',
+            
+            // --- STATE MANAGEMENT ---
+            state: {
+                user: null, // Holds user info if logged in
+                currentRoleSelection: null, // Temp state for login form
+                selectedFacility: null, // Stores facility currently being booked
+                selectedTimeSlot: { id: 'slot-1', date: 'July 21', time: '2:00 PM - 6:00 PM' },
+                selectedDuration: 4,
+                facilities: [
+                    { id: 1, facilityCode: 'APIC-HYD-01', name: '3D Printer Lab', location: 'Room 201 - Industrial SLA Prototyping', locationKey: 'hyd', typeKey: '3d', price: 750, status: 'Ready', icon: 'fa-cube', description: 'High-precision SLA & FDM 3D printers for rapid prototyping.' },
+                    { id: 2, facilityCode: 'APIC-HYD-02', name: 'CNC Machining Center', location: 'Room 105 - Heavy Machinery', locationKey: 'hyd', typeKey: 'cnc', price: 1200, status: 'Ready', icon: 'fa-gear', description: '5-axis CNC machines for precise metal and plastic milling.' },
+                    { id: 3, facilityCode: 'APIC-VIZ-01', name: 'Electronics Assembly', location: 'Lab 3B - PCB & Testing', locationKey: 'vizag', typeKey: 'pcb', price: 500, status: 'Busy', icon: 'fa-microchip', description: 'Soldering stations, oscilloscopes, and PCB testing tools.' }
+                ],
+                activeJobs: [
+                    { id: 'JOB-9921', facilityName: 'APIC Vizag Prototyping Hub', type: 'Industrial 3D Print', name: 'Drone Chassis Fabrication', status: 'Printing (65%)', progress: 65, start: '09:00 AM', end: '01:30 PM' }
+                ],
+                upcomingJobs: [
+                    { id: 'JOB-9925', facilityName: 'Tirupati Heavy Machining', name: 'CNC Machining (Aluminum)', date: '2026-07-28', time: '10:00 AM', duration: 4, status: 'Confirmed' }
+                ]
+            },
+
+            // --- INITIALIZATION ---
+            init: function() {
+                // Initialize default UI views
+                this.updateAuthUI();
+                this.renderFacilities();
+                this.renderDashboard();
+            },
+            
+            // --- ROUTING ---
+            navigate: function(viewId) {
+                // Hide all sections
+                document.querySelectorAll('.view-section').forEach(el => {
+                    el.classList.remove('active');
+                });
+                
+                // Show requested view
+                const view = document.getElementById(`view-${viewId}`);
+                if (view) {
+                    view.classList.add('active');
+                    this.currentView = viewId;
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    
+                    // Navbar management
+                    const nav = document.getElementById('main-nav');
+                    if (viewId === 'login') {
+                        nav.style.display = 'none';
+                    } else {
+                        nav.style.display = 'block';
+                    }
+                    
+                    // Route-specific initializations
+                    if ((viewId === 'user-dashboard' || viewId === 'operator-dashboard') && !this.state.user) {
+                        this.showModal('Please login to view your dashboard.', 'login');
+                    }
+                }
+            },
+
+            // --- AUTHENTICATION ---
+            selectRole: function(role) {
+                this.state.currentRoleSelection = role;
+                document.getElementById('login-role-selection').classList.add('hidden');
+                document.getElementById('login-form-container').classList.remove('hidden');
+                
+                const titleText = role === 'admin' ? 'Facility Admin Login' : 'Innovator Login';
+                document.getElementById('login-title-text').innerText = titleText;
+            },
+            
+            resetLogin: function() {
+                this.state.currentRoleSelection = null;
+                document.getElementById('login-role-selection').classList.remove('hidden');
+                document.getElementById('login-form-container').classList.add('hidden');
+            },
+
+            handleLogin: function(event) {
+                event.preventDefault(); // Prevent form submission
+                
+                if (this.state.currentRoleSelection === 'admin') {
+                    // Simulate setting ADMIN user state
+                    this.state.user = {
+                        name: 'Admin User',
+                        email: document.getElementById('email').value,
+                        role: 'admin'
+                    };
+                    this.updateAuthUI();
+                    this.navigate('operator-dashboard');
+                    this.showModal('Welcome to the Operator Console, ' + this.state.user.name);
+                } else {
+                    // Simulate setting INNOVATOR user state
+                    this.state.user = {
+                        name: 'Sarah J.',
+                        email: document.getElementById('email').value,
+                        membership: 'Pro Start-up',
+                        role: 'innovator'
+                    };
+                    this.updateAuthUI();
+                    this.navigate('user-dashboard');
+                    this.showModal('Welcome back, ' + this.state.user.name);
+                }
+            },
+
+            logout: function() {
+                this.state.user = null;
+                this.updateAuthUI();
+                this.navigate('home');
+                if(document.getElementById('login-role-selection')) {
+                    this.resetLogin(); // Reset form view for next login
+                }
+            },
+
+            updateAuthUI: function() {
+                const authSection = document.getElementById('nav-auth-section');
+                if (this.state.user) {
+                    const dashRoute = this.state.user.role === 'admin' ? 'operator-dashboard' : 'user-dashboard';
+                    authSection.innerHTML = `
+                        <div class="flex items-center gap-4">
+                            <button onclick="app.navigate('${dashRoute}')" class="text-brand font-medium hover:underline text-sm transition hidden sm:inline-block">Dashboard</button>
+                            <span class="text-sm font-medium text-gray-700">Hi, ${this.state.user.name}</span>
+                            <button onclick="app.logout()" class="text-neutral hover:text-danger text-sm font-medium transition">Logout</button>
+                        </div>
+                    `;
+                } else {
+                    authSection.innerHTML = `
+                        <button onclick="app.navigate('login')" class="bg-brand text-white px-5 py-2 rounded font-medium hover:bg-opacity-90 transition shadow-sm">
+                            Login / Register
+                        </button>
+                    `;
+                }
+            },
+
+            // --- FACILITIES (DYNAMIC LISTING & FILTERING) ---
+            renderFacilities: function() {
+                const container = document.getElementById('facilities-list-container');
+                const searchQ = document.getElementById('search-input')?.value.toLowerCase() || '';
+                const typeQ = document.getElementById('filter-type')?.value || '';
+                const locQ = document.getElementById('filter-location')?.value || '';
+
+                // Filter logic
+                const filtered = this.state.facilities.filter(f => {
+                    const matchSearch = f.name.toLowerCase().includes(searchQ) || f.location.toLowerCase().includes(searchQ);
+                    const matchType = typeQ === '' || f.typeKey === typeQ;
+                    const matchLoc = locQ === '' || f.locationKey === locQ;
+                    return matchSearch && matchType && matchLoc;
+                });
+
+                // Generate HTML
+                if (filtered.length === 0) {
+                    container.innerHTML = `<div class="col-span-3 p-8 text-center text-gray-500 bg-white rounded-xl border border-gray-200">No facilities found matching your criteria.</div>`;
+                    return;
+                }
+
+                container.innerHTML = filtered.map(f => {
+                    const isBusy = f.status === 'Busy';
+                    const statusClass = isBusy ? 'bg-amber-100 text-amber-700' : 'bg-green-100 text-green-700';
+                    const disableBtn = isBusy ? 'disabled class="bg-gray-300 text-white cursor-not-allowed px-4 py-2 rounded-lg text-sm font-medium"' : `onclick="app.startBooking(${f.id})" class="bg-blue-600 text-white hover:bg-blue-700 transition px-4 py-2 rounded-lg text-sm font-medium"`;
+                    
+                    return `
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col transition hover:shadow-md">
+                            <div class="h-40 bg-[#eef2f6] flex items-center justify-center text-5xl text-gray-400">
+                                <i class="fa-solid ${f.icon}"></i>
+                            </div>
+                            <div class="p-5 flex-grow flex flex-col">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-blue-700 text-xs font-bold">${f.facilityCode}</span>
+                                    <span class="${statusClass} text-xs px-2 py-0.5 rounded font-medium">${f.status}</span>
+                                </div>
+                                <h3 class="text-lg font-bold text-gray-900 mb-1">${f.name}</h3>
+                                <p class="text-gray-500 text-sm mb-4 line-clamp-2">${f.description}</p>
+                                
+                                <div class="flex justify-between items-center mt-auto pt-4 border-t border-gray-50">
+                                    <div>
+                                        <span class="font-bold text-gray-900 text-base">₹${f.price}</span>
+                                        <span class="text-gray-500 text-sm"> / hr</span>
+                                    </div>
+                                    <button ${disableBtn}>
+                                        Book & Play
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            },
+
+            // --- BOOKING PROCESS ---
+            startBooking: function(facilityId) {
+                // Must be logged in
+                if (!this.state.user) {
+                    this.showModal('Please sign in to book a facility.', 'login');
+                    return;
+                }
+
+                // Find facility and set it to state
+                this.state.selectedFacility = this.state.facilities.find(f => f.id === facilityId);
+                
+                // Set default booking selections
+                this.state.selectedDuration = 4;
+                this.state.selectedTimeSlot = { id: 'slot-1', date: 'July 21', time: '2:00 PM - 6:00 PM' };
+                
+                this.renderBookingLeftPanel();
+                this.updateBookingCost();
+                this.navigate('booking');
+            },
+
+            renderBookingLeftPanel: function() {
+                const f = this.state.selectedFacility;
+                const slots = [
+                    { id: 'slot-1', date: 'July 21', time: '2:00 PM - 6:00 PM' },
+                    { id: 'slot-2', date: 'July 22', time: '9:00 AM - 1:00 PM' },
+                    { id: 'slot-3', date: 'July 22', time: '2:00 PM - 6:00 PM' }
+                ];
+                
+                const slotsHtml = slots.map(s => {
+                    const isActive = this.state.selectedTimeSlot.id === s.id;
+                    const activeClass = isActive ? 'bg-blue-50 border-blue-400' : 'bg-white border-gray-200 hover:border-blue-300';
+                    const textClass = isActive ? 'text-blue-800' : 'text-gray-700';
+                    return `
+                        <div onclick="app.selectTimeSlot('${s.id}', '${s.date}', '${s.time}')" class="${activeClass} border rounded-lg p-4 text-center cursor-pointer transition">
+                            <div class="text-sm font-medium ${textClass} mb-1">${s.date}</div>
+                            <div class="text-sm font-bold ${textClass}">${s.time}</div>
+                        </div>
+                    `;
+                }).join('');
+
+                const d = this.state.selectedDuration;
+                
+                document.getElementById('booking-left-panel').innerHTML = `
+                    <div class="mb-6">
+                        <div class="text-blue-700 text-sm font-bold mb-1">${f.facilityCode}</div>
+                        <h2 class="text-2xl font-bold text-gray-900 mb-1">${f.name}</h2>
+                        <p class="text-gray-500 text-sm">${f.location}</p>
+                    </div>
+                    
+                    <hr class="border-gray-100 my-6">
+                    
+                    <h3 class="font-bold text-gray-900 mb-4 text-sm">Select Time Slot</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                        ${slotsHtml}
+                    </div>
+
+                    <h3 class="font-bold text-gray-900 mb-4 text-sm">Duration</h3>
+                    <div class="flex gap-3 flex-wrap">
+                        <button onclick="app.selectDuration(4)" class="${d === 4 ? 'bg-[#0f172a] text-white border-[#0f172a]' : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'} border px-6 py-2 rounded-lg text-sm font-medium transition">4 Hours</button>
+                        <button onclick="app.selectDuration(8)" class="${d === 8 ? 'bg-[#0f172a] text-white border-[#0f172a]' : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'} border px-6 py-2 rounded-lg text-sm font-medium transition">8 Hours</button>
+                        <button onclick="app.selectDuration(24)" class="${d === 24 ? 'bg-[#0f172a] text-white border-[#0f172a]' : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'} border px-6 py-2 rounded-lg text-sm font-medium transition">Full Day</button>
+                    </div>
+                `;
+            },
+
+            selectTimeSlot: function(id, date, time) {
+                this.state.selectedTimeSlot = { id, date, time };
+                this.renderBookingLeftPanel();
+                this.updateBookingCost();
+            },
+
+            selectDuration: function(hours) {
+                this.state.selectedDuration = hours;
+                this.renderBookingLeftPanel();
+                this.updateBookingCost();
+            },
+
+            updateBookingCost: function() {
+                if (!this.state.selectedFacility) return;
+
+                const hourlyRate = this.state.selectedFacility.price;
+                const duration = this.state.selectedDuration;
+                const slot = this.state.selectedTimeSlot;
+                
+                // Calculate
+                const subtotal = hourlyRate * duration;
+                const tax = Math.round(subtotal * 0.12); // 12% matching screenshot logic
+                const total = subtotal + tax;
+                
+                // Helper to add commas (e.g., 3,000)
+                const fmt = (num) => num.toLocaleString('en-IN');
+                
+                // Update Summary text
+                document.getElementById('booking-summary-details').innerHTML = `
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Facility</span>
+                        <span class="font-medium text-gray-900">${this.state.selectedFacility.facilityCode}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Time Slot</span>
+                        <span class="font-medium text-gray-900">${slot.time}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-500">Duration</span>
+                        <span class="font-medium text-gray-900">${duration === 24 ? 'Full Day' : duration + ' Hours'}</span>
+                    </div>
+                `;
+
+                // Update Pricing Breakdowns
+                document.getElementById('calc-rate-text').innerText = `₹${fmt(hourlyRate)} x ${duration}`;
+                document.getElementById('calc-subtotal').innerText = fmt(subtotal);
+                document.getElementById('calc-tax').innerText = fmt(tax);
+                document.getElementById('calc-total').innerText = fmt(total);
+            },
+
+            processBooking: function() {
+                if (!this.state.selectedFacility) return;
+
+                // Add to upcoming jobs state
+                const newBooking = {
+                    id: 'JOB-' + Math.floor(1000 + Math.random() * 9000),
+                    facilityName: this.state.selectedFacility.name,
+                    name: 'New Custom Prototype', // Mock name
+                    date: this.state.selectedTimeSlot.date,
+                    time: this.state.selectedTimeSlot.time.split(' - ')[0],
+                    duration: this.state.selectedDuration,
+                    status: 'Confirmed'
+                };
+
+                this.state.upcomingJobs.push(newBooking);
+                
+                // Refresh dashboard and redirect
+                this.renderDashboard();
+                this.showModal('Payment Processing... Booking Confirmed!', 'user-dashboard');
+            },
+
+            // --- USER DASHBOARD ---
+            renderDashboard: function() {
+                const activeContainer = document.getElementById('dashboard-active-jobs');
+                const upcomingContainer = document.getElementById('dashboard-upcoming-jobs');
+                
+                // Render Active Jobs
+                if (this.state.activeJobs.length === 0) {
+                    activeContainer.innerHTML = '<p class="text-neutral text-sm">No active jobs currently running.</p>';
+                } else {
+                    activeContainer.innerHTML = this.state.activeJobs.map(job => `
+                        <div class="border border-gray-200 rounded p-4 relative mb-4 last:mb-0">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <div class="font-bold text-gray-900">${job.name}</div>
+                                    <div class="text-sm text-neutral">ID: #${job.id} • ${job.facilityName}</div>
+                                </div>
+                                <span class="bg-warning/10 text-warning text-xs px-2 py-1 rounded font-bold uppercase border border-warning/20">${job.status}</span>
+                            </div>
+                            <!-- Progress Bar -->
+                            <div class="w-full bg-gray-200 rounded-full h-2 mb-2">
+                                <div class="bg-warning h-2 rounded-full" style="width: ${job.progress}%"></div>
+                            </div>
+                            <div class="flex justify-between text-xs text-neutral mt-2">
+                                <span>Started: ${job.start}</span>
+                                <span>Est. Completion: ${job.end}</span>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-gray-100 flex justify-end gap-2">
+                                <button class="text-sm text-brand border border-brand px-3 py-1.5 rounded hover:bg-brand/5 transition">View Camera Feed</button>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+
+                // Render Upcoming Jobs
+                if (this.state.upcomingJobs.length === 0) {
+                    upcomingContainer.innerHTML = '<div class="p-4 text-neutral text-sm">No upcoming bookings.</div>';
+                } else {
+                    upcomingContainer.innerHTML = this.state.upcomingJobs.map(job => {
+                        // Format date nicely
+                        const d = new Date(job.date);
+                        const month = d.toLocaleString('default', { month: 'short' });
+                        const day = d.getDate();
+                        
+                        return `
+                            <div class="p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center hover:bg-gray-50 transition">
+                                <div class="flex gap-4 items-center">
+                                    <div class="bg-brand/10 text-brand rounded text-center min-w-[50px] p-2 shrink-0">
+                                        <div class="text-xs uppercase font-bold">${month}</div>
+                                        <div class="text-xl font-bold">${day || '-'}</div>
+                                    </div>
+                                    <div>
+                                        <div class="font-bold text-gray-900 text-sm">${job.name}</div>
+                                        <div class="text-xs text-neutral">${job.facilityName} • ${job.time} (${job.duration}hrs)</div>
+                                    </div>
+                                </div>
+                                <div class="mt-3 sm:mt-0 flex items-center gap-3">
+                                    <span class="bg-success/10 text-success text-xs px-2 py-1 rounded border border-success/20">${job.status}</span>
+                                    <button class="text-xs text-neutral underline hover:text-gray-900" title="Reschedule"><i class="fa-solid fa-pen"></i></button>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            },
+
+            // --- FILE UPLOAD LOGIC ---
+            handleFileUpload: function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    document.getElementById('uploaded-filename').innerText = file.name;
+                    document.getElementById('upload-status').classList.remove('hidden');
+                    document.getElementById('cad-upload-dropzone').classList.add('border-success', 'bg-success/5');
+                }
+            },
+            
+            removeFile: function(event) {
+                if(event) event.stopPropagation(); // Prevent clicking the dropzone underneath
+                document.getElementById('cad-upload').value = '';
+                document.getElementById('upload-status').classList.add('hidden');
+                document.getElementById('cad-upload-dropzone').classList.remove('border-success', 'bg-success/5');
+            },
+            
+            // --- CUSTOM MODAL ---
+            modalTargetRoute: null,
+            
+            showModal: function(message, routeTo = null) {
+                const modal = document.getElementById('app-modal');
+                const content = document.getElementById('app-modal-content');
+                document.getElementById('app-modal-text').innerText = message;
+                
+                this.modalTargetRoute = routeTo;
+                
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    modal.classList.remove('opacity-0');
+                    content.classList.remove('scale-95');
+                }, 10);
+            },
+            
+            closeModal: function() {
+                const modal = document.getElementById('app-modal');
+                const content = document.getElementById('app-modal-content');
+                
+                modal.classList.add('opacity-0');
+                content.classList.add('scale-95');
+                
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    if (this.modalTargetRoute) {
+                        this.navigate(this.modalTargetRoute);
+                        this.modalTargetRoute = null;
+                    }
+                }, 300);
+            }
+        };
+
+        // Initialize the app state on load
+        document.addEventListener('DOMContentLoaded', () => {
+            app.init();
+        });
+    </script>
+</body>
+</html>
