@@ -163,28 +163,62 @@ const UserDashboard = () => {
       
       // Simulate AI analysis delay
       setTimeout(async () => {
+        // Dynamic logic based on file extension
+        const ext = file.name.split('.').pop().toLowerCase();
+        let machine = 'HAAS UMC-500';
+        let timeEst = '4-6 Hours';
+        let costEst = 3500;
+        let confidence = '92%';
+
+        if (['stl', 'obj', '3mf'].includes(ext)) {
+          machine = 'Stratasys F900 3D Printer';
+          timeEst = '12-24 Hours';
+          costEst = 4500;
+          confidence = '95%';
+        } else if (['pdf', 'doc', 'docx', 'txt'].includes(ext)) {
+          machine = 'Requirements Analysis (Multi-Discipline)';
+          timeEst = '1-2 Days';
+          costEst = 2000;
+          confidence = '88%';
+        } else if (['dwg', 'dxf'].includes(ext)) {
+          machine = 'Epilog Fusion Pro Laser Cutter';
+          timeEst = '2-3 Hours';
+          costEst = 1200;
+          confidence = '97%';
+        } else if (['step', 'stp', 'iges', 'cad'].includes(ext)) {
+          machine = 'HAAS UMC-500 5-Axis CNC';
+          timeEst = '6-8 Hours';
+          costEst = 5500;
+          confidence = '94%';
+        } else {
+          machine = 'General Fabrication Node';
+          timeEst = 'TBD';
+          costEst = 1500;
+          confidence = '75%';
+        }
+
         try {
           const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/bookings/estimate-cost`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ attachedFile: file.name, facility: 'AI Recommended: 5-Axis CNC', equipmentType: 'CNC', duration: 4 })
+            body: JSON.stringify({ attachedFile: file.name, facility: `AI Recommended: ${machine}`, equipmentType: ext, duration: 4 })
           });
           const data = await res.json();
           setAiQuoteModal({ 
             status: 'ready', 
             file, 
             quoteData: { 
-              materialCost: data.materialCost || Math.floor(Math.random() * 5000) + 1000,
-              timeEst: '4-6 Hours',
-              machine: 'HAAS UMC-500',
-              aiConfidence: '94%'
+              materialCost: data.materialCost || costEst,
+              timeEst: timeEst,
+              machine: machine,
+              aiConfidence: confidence
             } 
           });
         } catch (err) {
           setAiQuoteModal({ 
             status: 'ready', 
             file, 
-            quoteData: { materialCost: 3500, timeEst: '4-6 Hours', machine: 'HAAS UMC-500', aiConfidence: '92%' } 
+            quoteData: { materialCost: costEst, timeEst: timeEst, machine: machine, aiConfidence: confidence } 
           });
         }
       }, 2500);
