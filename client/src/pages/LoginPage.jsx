@@ -28,8 +28,13 @@ const LoginPage = () => {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: formData.email, uid: firebaseUser.uid })
         });
+        
+        if (!res.ok) {
+          const text = await res.text();
+          throw new Error(text.includes('{') ? JSON.parse(text).message : 'Backend Error: Failed to connect to the database. Check Render logs.');
+        }
+        
         const data = await res.json();
-        if (!res.ok) throw new Error(data.message || 'Error fetching user profile');
         const token = await firebaseUser.getIdToken();
         localStorage.setItem('token', token);
         localStorage.setItem('user', JSON.stringify(data.user));
@@ -45,8 +50,13 @@ const LoginPage = () => {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ uid: firebaseUser.uid, name: formData.name, email: formData.email, role: formData.role })
         });
+        
+        if (!res.ok) {
+          const text = await res.text();
+          throw new Error(text.includes('{') ? JSON.parse(text).message : 'Backend Error: Failed to connect to the database. Check Render logs.');
+        }
+        
         const data = await res.json();
-        if (!res.ok) throw new Error(data.message || 'Error saving user profile');
         const token = await firebaseUser.getIdToken();
         localStorage.setItem('token', token);
         localStorage.setItem('user', JSON.stringify(data.user));
