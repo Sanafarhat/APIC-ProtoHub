@@ -232,6 +232,10 @@ const FacilitiesPage = () => {
                           </div>
                           <img
                             src={isValidImageUrl(fac.imageUrl) ? fac.imageUrl : getDeterministicImage(fac.name)}
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = getDeterministicImage(fac.name);
+                            }}
                             alt={fac.name}
                             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                           />
