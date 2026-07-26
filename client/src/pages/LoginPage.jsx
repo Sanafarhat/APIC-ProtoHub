@@ -1,21 +1,30 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { GraduationCap, Building, Loader2 } from 'lucide-react';
+import { GraduationCap, Building, Loader2, Eye, EyeOff } from 'lucide-react';
 import { auth } from '../firebase';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
-  const [formData, setFormData] = useState({ name: '', email: '', password: '', role: 'innovator' });
+  const [formData, setFormData] = useState({ name: '', email: '', password: '', confirmPassword: '', role: 'innovator' });
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setSuccess('');
+    
+    if (!isLogin && formData.password !== formData.confirmPassword) {
+      return setError('Passwords do not match.');
+    }
+    
     setLoading(true);
 
     try {
@@ -57,12 +66,11 @@ const LoginPage = () => {
         }
         
         const data = await res.json();
-        const token = await firebaseUser.getIdToken();
-        localStorage.setItem('token', token);
-        localStorage.setItem('user', JSON.stringify(data.user));
         
-        if (data.user.role === 'operator') navigate('/operator-dashboard');
-        else navigate('/dashboard');
+        await auth.signOut();
+        setIsLogin(true);
+        setSuccess('Account created successfully! Please log in.');
+        setFormData({ ...formData, password: '', confirmPassword: '' });
       }
     } catch (err) {
       console.error(err);
@@ -97,6 +105,11 @@ const LoginPage = () => {
           {error && (
             <div className="mb-6 p-4 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-900/50 text-red-600 dark:text-red-400 text-sm font-bold text-center">
               {error}
+            </div>
+          )}
+          {success && (
+            <div className="mb-6 p-4 rounded-xl bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-900/50 text-green-600 dark:text-green-400 text-sm font-bold text-center">
+              {success}
             </div>
           )}
 
@@ -134,14 +147,31 @@ const LoginPage = () => {
 
             <div>
               <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Password</label>
-              <input type="password" name="password" className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-medium" placeholder="••••••••" value={formData.password} onChange={handleChange} required />
+              <div className="relative">
+                <input type={showPassword ? "text" : "password"} name="password" className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-medium pr-10" placeholder="••••••••" value={formData.password} onChange={handleChange} required />
+                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
             </div>
+
+            {!isLogin && (
+              <div>
+                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Confirm Password</label>
+                <div className="relative">
+                  <input type={showConfirmPassword ? "text" : "password"} name="confirmPassword" className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-medium pr-10" placeholder="••••••••" value={formData.confirmPassword} onChange={handleChange} required />
+                  <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                    {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
+              </div>
+            )}
 
             {!isLogin && (
               <div className="flex items-start gap-2 pt-2 text-sm text-slate-600 dark:text-slate-400 font-medium">
                 <input type="checkbox" id="terms" required className="mt-1 rounded text-indigo-600 focus:ring-indigo-500" />
                 <label htmlFor="terms">
-                  I agree to the <Link to="/terms" className="text-indigo-600 dark:text-indigo-400 font-bold hover:underline">Terms & Conditions</Link>
+                  I agree to the <Link to="/terms" target="_blank" rel="noopener noreferrer" className="text-indigo-600 dark:text-indigo-400 font-bold hover:underline">Terms & Conditions</Link>
                 </label>
               </div>
             )}

@@ -11,7 +11,6 @@ const BookingPage = () => {
   
   const [date, setDate] = useState('');
   const [duration, setDuration] = useState(1);
-  const [equipment, setEquipment] = useState('');
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [error, setError] = useState('');
 
@@ -158,30 +157,33 @@ const BookingPage = () => {
     doc.setFontSize(12);
     doc.setTextColor(0, 0, 0);
     doc.text(`Facility: ${facility.name}`, 20, 82);
-    doc.text(`Date Booked: ${date}`, 20, 89);
-    doc.text(`Time Slot: ${selectedSlot}`, 20, 96);
-    doc.text(`Duration: ${duration} Hour(s)`, 20, 103);
+    doc.text(`College/Institution: ${facility.institution || 'N/A'}`, 20, 89);
+    doc.text(`Operator/Incharge: ${facility.operatorName || 'N/A'}`, 20, 96);
+    doc.text(`Contact: ${facility.operatorContact || 'N/A'}`, 20, 103);
+    doc.text(`Date Booked: ${date}`, 20, 110);
+    doc.text(`Time Slot: ${selectedSlot}`, 20, 117);
+    doc.text(`Duration: ${duration} Hour(s)`, 20, 124);
     
-    doc.line(20, 109, 190, 109);
+    doc.line(20, 130, 190, 130);
     
     doc.setFontSize(16);
     doc.setTextColor(79, 70, 229);
-    doc.text("Cost Breakdown", 20, 119);
+    doc.text("Cost Breakdown", 20, 140);
     
     doc.setFontSize(12);
     doc.setTextColor(0, 0, 0);
-    doc.text(`Base Cost: INR ${(facility.hourlyRate * duration).toFixed(2)}`, 20, 129);
-    doc.text(`Extra/AI Material Cost: INR ${materialCost.toFixed(2)}`, 20, 136);
-    doc.text(`Taxes (18% GST): INR ${(totalCost - (facility.hourlyRate * duration) - materialCost).toFixed(2)}`, 20, 143);
+    doc.text(`Base Cost: INR ${(facility.hourlyRate * duration).toFixed(2)}`, 20, 150);
+    doc.text(`Extra/AI Material Cost: INR ${materialCost.toFixed(2)}`, 20, 157);
+    doc.text(`Taxes (18% GST): INR ${(totalCost - (facility.hourlyRate * duration) - materialCost).toFixed(2)}`, 20, 164);
     
     doc.setFontSize(14);
     doc.setFont("helvetica", "bold");
-    doc.text(`TOTAL PAID: INR ${totalCost.toFixed(2)}`, 20, 155);
+    doc.text(`TOTAL PAID: INR ${totalCost.toFixed(2)}`, 20, 176);
     
     doc.setFontSize(10);
     doc.setFont("helvetica", "italic");
     doc.setTextColor(120, 120, 120);
-    doc.text("Thank you for choosing APIC ProtoHub for your prototyping needs!", 20, 175);
+    doc.text("Thank you for choosing APIC ProtoHub for your prototyping needs!", 20, 196);
     
     doc.save(`APIC_Receipt_${paymentId}.pdf`);
   };
@@ -200,7 +202,6 @@ const BookingPage = () => {
           date,
           startTime: selectedSlot,
           duration,
-          equipment,
           attachedFile,
           materialCost,
           aiEstimated,
@@ -324,18 +325,6 @@ const BookingPage = () => {
                     <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Select Date</label>
                     <input type="date" className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-medium" value={date} onChange={e => {setDate(e.target.value); setAvailableSlots(null); setSelectedSlot('');}} required />
                   </div>
-                  
-                  <div>
-                    <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">Specific Resource</label>
-                    <select className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-medium appearance-none cursor-pointer" value={equipment} onChange={e => setEquipment(e.target.value)}>
-                      <option value="">Any Available Machine</option>
-                      <option value="3D Printer (FDM)">3D Printer (FDM)</option>
-                      <option value="3D Printer (SLA)">3D Printer (SLA)</option>
-                      <option value="CNC Router (3-Axis)">CNC Router (3-Axis)</option>
-                      <option value="Laser Cutter">Laser Cutter</option>
-                      <option value="PCB Milling Machine">PCB Milling Machine</option>
-                    </select>
-                  </div>
                 </div>
 
                 {availableSlots === null && (
@@ -377,7 +366,7 @@ const BookingPage = () => {
                         <div className="flex items-start gap-3 mb-6 p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700">
                           <input type="checkbox" id="terms" required checked={agreeTerms} onChange={e => setAgreeTerms(e.target.checked)} className="mt-1 rounded text-indigo-600 focus:ring-indigo-500" />
                           <label htmlFor="terms" className="text-sm font-medium text-slate-600 dark:text-slate-400">
-                            I agree to the <Link to="/terms" className="text-indigo-600 dark:text-indigo-400 font-bold hover:underline">Terms & Conditions</Link> and understand that facility rules apply.
+                            I agree to the <Link to="/terms" target="_blank" rel="noopener noreferrer" className="text-indigo-600 dark:text-indigo-400 font-bold hover:underline">Terms & Conditions</Link> and understand that facility rules apply.
                           </label>
                         </div>
 

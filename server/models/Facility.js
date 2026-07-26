@@ -12,7 +12,9 @@ const facilitySchema = new mongoose.Schema({
   reviews: { type: Number, default: 0 },
   icon: { type: String }, // Icon identifier string
   imageUrl: { type: String }, // URL for the facility image
-  softwareType: { type: String } // Software category if applicable
+  softwareType: { type: String }, // Software category if applicable
+  operatorName: { type: String }, // Operator or incharge name
+  operatorContact: { type: String } // Operator or incharge contact number
 });
 
 module.exports = mongoose.model('Facility', facilitySchema);
