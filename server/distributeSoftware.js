@@ -18,13 +18,14 @@ mongoose.connect(process.env.MONGO_URI).then(async () => {
     { name: 'Aditya University', city: 'Surampalem' }
   ];
 
-  // Base 9 software equipments
   const baseSoftware = [
     {
       name: 'SolidWorks License Server',
-      description: 'Network license server for SolidWorks CAD design and simulation suite. Supports up to 50 concurrent users.',
+      description: 'Enterprise CAD software access for mechanical design and simulation.',
       equipmentType: 'Software',
-      department: 'Mechanical',
+      softwareType: 'CAD/CAM',
+      hourlyRate: 500,
+      status: 'available',
       rating: 4.8,
       reviews: 210,
       icon: 'Cpu',
@@ -32,9 +33,11 @@ mongoose.connect(process.env.MONGO_URI).then(async () => {
     },
     {
       name: 'MATLAB Cloud Node',
-      description: 'High-performance computing node for MATLAB parallel processing and data analysis.',
+      description: 'High-performance computing node for MATLAB data analysis and modeling.',
       equipmentType: 'Software',
-      department: 'Electronics',
+      softwareType: 'Simulation',
+      hourlyRate: 800,
+      status: 'available',
       rating: 4.7,
       reviews: 130,
       icon: 'Settings',
@@ -42,9 +45,11 @@ mongoose.connect(process.env.MONGO_URI).then(async () => {
     },
     {
       name: 'Adobe Creative Cloud Suite',
-      description: 'Full suite of Adobe creative tools including Photoshop, Illustrator, Premiere Pro, and more.',
+      description: 'Full suite access for UI/UX design, video editing, and graphics.',
       equipmentType: 'Software',
-      department: 'Design',
+      softwareType: 'Design',
+      hourlyRate: 400,
+      status: 'available',
       rating: 4.9,
       reviews: 340,
       icon: 'Settings',
@@ -52,9 +57,11 @@ mongoose.connect(process.env.MONGO_URI).then(async () => {
     },
     {
       name: 'Ansys Multiphysics',
-      description: 'Advanced engineering simulation software for structural, thermal, and fluid dynamics analysis.',
+      description: 'Comprehensive simulation software for engineering challenges.',
       equipmentType: 'Software',
-      department: 'Mechanical',
+      softwareType: 'Simulation',
+      hourlyRate: 1000,
+      status: 'available',
       rating: 4.6,
       reviews: 80,
       icon: 'Wind',
@@ -62,9 +69,11 @@ mongoose.connect(process.env.MONGO_URI).then(async () => {
     },
     {
       name: 'AutoCAD Pro License',
-      description: 'Professional 2D and 3D CAD design software with advanced rendering capabilities.',
+      description: 'Professional 2D and 3D CAD design tool for architects and engineers.',
       equipmentType: 'Software',
-      department: 'Civil',
+      softwareType: 'CAD/CAM',
+      hourlyRate: 300,
+      status: 'available',
       rating: 4.5,
       reviews: 145,
       icon: 'Settings',
@@ -72,9 +81,11 @@ mongoose.connect(process.env.MONGO_URI).then(async () => {
     },
     {
       name: 'Unity 3D Enterprise',
-      description: 'Real-time 3D development platform for games, XR, and interactive experiences.',
+      description: 'Game engine and AR/VR development suite for innovators.',
       equipmentType: 'Software',
-      department: 'Computer Science',
+      softwareType: 'Development',
+      hourlyRate: 450,
+      status: 'available',
       rating: 4.8,
       reviews: 210,
       icon: 'Cpu',
@@ -82,9 +93,11 @@ mongoose.connect(process.env.MONGO_URI).then(async () => {
     },
     {
       name: 'Tableau Data Visualization',
-      description: 'Advanced analytics and data visualization platform for business intelligence.',
+      description: 'Enterprise data visualization and business intelligence software.',
       equipmentType: 'Software',
-      department: 'Data Science',
+      softwareType: 'Analytics',
+      hourlyRate: 600,
+      status: 'available',
       rating: 4.6,
       reviews: 95,
       icon: 'Settings',
@@ -92,9 +105,11 @@ mongoose.connect(process.env.MONGO_URI).then(async () => {
     },
     {
       name: 'Autodesk Maya',
-      description: '3D computer graphics application used to develop video games, 3D applications, animated films, TV series, and visual effects.',
+      description: '3D computer graphics software for interactive 3D applications and visual effects.',
       equipmentType: 'Software',
-      department: 'Design',
+      softwareType: 'Design',
+      hourlyRate: 700,
+      status: 'available',
       rating: 4.9,
       reviews: 175,
       icon: 'Settings',
@@ -102,9 +117,11 @@ mongoose.connect(process.env.MONGO_URI).then(async () => {
     },
     {
       name: 'JetBrains All Products Pack',
-      description: 'Complete suite of professional IDEs including IntelliJ IDEA, PyCharm, WebStorm, and more.',
+      description: 'Comprehensive IDE suite for professional software development across all major languages.',
       equipmentType: 'Software',
-      department: 'Computer Science',
+      softwareType: 'Development',
+      hourlyRate: 200,
+      status: 'available',
       rating: 4.8,
       reviews: 420,
       icon: 'Cpu',
@@ -112,11 +129,9 @@ mongoose.connect(process.env.MONGO_URI).then(async () => {
     }
   ];
 
-  // 1. Delete all existing Software facilities
   await db.collection('facilities').deleteMany({ equipmentType: 'Software' });
   console.log('Cleared existing software equipments.');
 
-  // 2. Insert 9 software items for EACH of the 11 institutions
   const newFacilities = [];
   for (const inst of apInstitutions) {
     for (const sw of baseSoftware) {
@@ -129,7 +144,7 @@ mongoose.connect(process.env.MONGO_URI).then(async () => {
   }
 
   const result = await db.collection('facilities').insertMany(newFacilities);
-  console.log(`Inserted ${result.insertedCount} software facilities across all locations.`);
+  console.log(`Inserted ${result.insertedCount} software facilities with ALL fields included.`);
   
   process.exit();
 });
