@@ -9,9 +9,15 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 // Get all bookings
 router.get('/', async (req, res) => {
   try {
-    const userId = req.query.userId;
+    const { userId, operatorOrg } = req.query;
     const filter = userId ? { user: userId } : {};
-    const bookings = await Booking.find(filter).populate('facility').populate('user', '-password');
+    let bookings = await Booking.find(filter).populate('facility').populate('user', '-password');
+    
+    // Filter by operator organization if provided
+    if (operatorOrg) {
+      bookings = bookings.filter(b => b.facility && b.facility.institution === operatorOrg);
+    }
+    
     res.json(bookings);
   } catch (err) {
     res.status(500).json({ message: err.message });

@@ -39,7 +39,7 @@ const OperatorDashboard = () => {
 
   useEffect(() => {
     if (user && user.role === 'operator') {
-      fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/bookings`)
+      fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/bookings?operatorOrg=${encodeURIComponent(user.organization || '')}`)
         .then(res => res.json())
         .then(data => {
           const sorted = data.sort((a, b) => new Date(b.date) - new Date(a.date));
