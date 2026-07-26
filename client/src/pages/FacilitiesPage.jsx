@@ -27,6 +27,15 @@ const getDeterministicImage = (name) => {
   return DEFAULT_IMAGES[Math.abs(hash) % DEFAULT_IMAGES.length];
 };
 
+const isValidImageUrl = (url) => {
+  if (!url) return false;
+  const lowerUrl = url.toLowerCase().trim();
+  if (lowerUrl === "/images/default.jpg" || lowerUrl === "null" || lowerUrl === "undefined" || lowerUrl === "n/a" || lowerUrl === "na" || lowerUrl === "-" || lowerUrl.includes("no image")) {
+    return false;
+  }
+  return true;
+};
+
 const FacilitiesPage = () => {
   const location = useLocation();
   const [facilities, setFacilities] = useState([]);
@@ -222,7 +231,7 @@ const FacilitiesPage = () => {
                             <Star size={12} className="text-amber-500 fill-amber-500" /> {fac.rating}
                           </div>
                           <img
-                            src={(!fac.imageUrl || fac.imageUrl === "/images/default.jpg") ? getDeterministicImage(fac.name) : fac.imageUrl}
+                            src={isValidImageUrl(fac.imageUrl) ? fac.imageUrl : getDeterministicImage(fac.name)}
                             alt={fac.name}
                             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                           />
