@@ -19,7 +19,7 @@ const moreSoftwareFacilities = [
     rating: 4.5,
     reviews: 145,
     icon: 'Settings',
-    imageUrl: '/images/default.jpg'
+    imageUrl: ''
   },
   {
     name: 'Unity 3D Enterprise',
@@ -33,7 +33,7 @@ const moreSoftwareFacilities = [
     rating: 4.8,
     reviews: 210,
     icon: 'Cpu',
-    imageUrl: '/images/default.jpg'
+    imageUrl: ''
   },
   {
     name: 'Tableau Data Visualization',
@@ -47,7 +47,7 @@ const moreSoftwareFacilities = [
     rating: 4.6,
     reviews: 95,
     icon: 'Settings',
-    imageUrl: '/images/default.jpg'
+    imageUrl: ''
   },
   {
     name: 'Autodesk Maya',
@@ -61,7 +61,7 @@ const moreSoftwareFacilities = [
     rating: 4.9,
     reviews: 175,
     icon: 'Settings',
-    imageUrl: '/images/default.jpg'
+    imageUrl: ''
   },
   {
     name: 'JetBrains All Products Pack',
@@ -75,7 +75,7 @@ const moreSoftwareFacilities = [
     rating: 4.8,
     reviews: 420,
     icon: 'Cpu',
-    imageUrl: '/images/default.jpg'
+    imageUrl: ''
   }
 ];
 

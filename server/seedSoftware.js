@@ -19,7 +19,7 @@ const softwareFacilities = [
     rating: 4.8,
     reviews: 210,
     icon: 'Cpu',
-    imageUrl: '/images/default.jpg'
+    imageUrl: ''
   },
   {
     name: 'MATLAB Cloud Node',
@@ -33,7 +33,7 @@ const softwareFacilities = [
     rating: 4.7,
     reviews: 130,
     icon: 'Settings',
-    imageUrl: '/images/default.jpg'
+    imageUrl: ''
   },
   {
     name: 'Adobe Creative Cloud Suite',
@@ -47,7 +47,7 @@ const softwareFacilities = [
     rating: 4.9,
     reviews: 340,
     icon: 'Settings',
-    imageUrl: '/images/default.jpg'
+    imageUrl: ''
   },
   {
     name: 'Ansys Multiphysics',
@@ -61,7 +61,7 @@ const softwareFacilities = [
     rating: 4.6,
     reviews: 80,
     icon: 'Wind',
-    imageUrl: '/images/default.jpg'
+    imageUrl: ''
   }
 ];
 
