@@ -1,0 +1,284 @@
+RWS Scanner (Range 0-100%)
+UPV (Range 0.1-9999.9 µ/sec)
+Accelerated Curing Tank (Temp 100 °C)
+Aggregate impact testing mechine (Hammer Weight 14Kg)
+Rebound Hammer Test (Rebound Values 10-100)
+CTM (Capacity 500 kN)
+CTM (Capacity 3000 kN)
+UTM (capacity 2000kN)
+Triaxial shear test ( Proving ring 2.5kN )
+CBR ( Proving ring 50kN )
+Direct shear ( Proving ring 2kN )
+Workstations
+Working Model Of Electronic Ignition System Of Two Wheeler (Kick Type & Handle Type)
+Cut Section Working Model Of Continuously Variable Transmission
+Cut Section Working Model Of Rotary Clutch Assembly Of Two Wheeler
+Working Model Of Electronic Ignition System Of Two Wheeler (Kick Type & Handle Type)
+Spark Plug Cleaner & Tester
+Work Bench With Engine Jig
+Model Of Cut Sectioned Engine Assembly With Clutch & Gearbox (Two WheelerWorking)
+Hydraulic Rams with Front wheel locking vice, Pneumatic Hanger, Parts Rack
+Wheel Alignment Machine Computerized 2D
+Wheel Balancing Machine
+Air Bag Simulator
+Demonstration Board Of MPFI System
+Two Post Car Lift Capacity 4000 Kg
+Cut Section Working Model Of Singe Plate Clutch Assembly
+JV 55 Vertical Machining Centre(Milling) Including: Voltage Stabilizer, Siemens 828D CNC System Suitable for Training Purpose
+840D SL/ 808D T /808D M Training Rack(Milling)
+JV 55 Smarturn(Turning Centre) Including: Voltage Stabilizer, Siemens 828D CNC System Suitable for Training Purpose
+840D SL/ 808D T Training Rack (Turning)
+Welding Simulators For SMAW/GTAW/GMAW
+Transweld 400 Welding Transformers (ARC)
+D.C. Arc Welding Rectifier - RS 400
+Auto K 400 (MIG)
+Magmatic 250 (MIG)
+Spot Welding Machine To 15 KVA With AllAccessories
+Gas Cutting Machine
+Window A.C 1.5 Ton With R-22 (2 Star) With Stand/Frame
+Split A.C 1.5 Ton With R-22 Highwall Split (2 Star) With Stand/Frame
+Cassette Air Conditioner Unit - 1.5TR With Stand/Frame
+VRF IV Plus System Outdoor Unit Only With Inverter Compressor - 8HP With Stand/Frame
+Deep Freezer 100 L Carrying With R134 A,With Stand/Frame
+Cold Room - 6000 BTU/hr
+Computers
+4 D.O.F Magenetic Gripper Robot
+4 D.O.F Vaccum Gripper Robot
+Computerized 1 Cylinder 4 stroke Petrol Automotive engine with eddycurrent Dynamometer
+Computerized 1 Cylinder 4 stroke Diesel water cooled engine with  eddycurrent Dynamometer test set up, Port fuel injection with CNG Gas system, Port fuel injection with fuel injector
+Vinyl Cutter
+CNC Router 4x8
+Printer-Elegoo Saturn 4ultra 16K (SLA)
+Printer-Bamboo labs H2D AMS Combo (FDM)
+Printer- H2D A1 mini -Bamboo labs (FDM)
+3D scanner-Raptor-X
+Laser Cutting Machine 1300mm x 900mm
+DE 10-Lite Development and Education Board, for AUP                                                   (This items are donated by intel FPGA Academic program for the purpose of education evaluation).
+DE1-soc Development and Education Kit, for AUP (This items are donated by intel FPGA Academic program for the purpose of education evaluation).
+Raspberry Pi 4
+Raspberry Pi 3
+Raspberry Pi 5
+Arduino Uno
+IOT Development Board
+NODE MCU
+Cadence University Bundle Analog & Digital FE & BE (Software)    100 Licencses
+Nexys 4 DDR-Artix-7 FPGA Board
+Xilinx Vivado  System Edition (Software)
+Xilinx CPLD BASIC LAB KIT
+Xilinx FPGA BASIC LAB KIT
+Spartan 3E
+Nexys -2
+Analog discovery kit
+Zed Development board
+Moku:Go
+DELTA HIGH Quality Programmable Spin  Coater DELTASPIN-MC
+Vacuum Check to hold substrate upto  3"diameter Direct drive 2 stage  Oil free vacuum pump
+Ph meter
+Haldane Apparatus
+Mineral Jig
+Froth Flotation Cell
+Slake Durability Apparatus
+Coal Pulverizer
+SELF CONTAINED BERTHING APPARATUS (SCBA)
+Gas Testing Chamber
+PC-PID based feedback Flow Level Pressure and Temperature Control Trainer with SCADA software
+Darcy's Law Apparatus
+Cloud and Pour Point Apparatus
+Fann viscometer 355A
+Raspberry Pi-4 with 2GB
+Node MCU ESP8266
+Arduino UNO
+Arduino UNO Cables
+32GB Sandisk memory card
+Raspberry Pi-4 Power Adaptor
+Temperature Sensor (LM35)
+5MM LED (Red & Green)
+Ultra Sonic Sensor
+Development  Board, 12V 1A Adaptor (Imported), PS/2 Keyboard, RTC, EEPROM, Zigbee Modules, 16×2 LCD, ADC for Raspberry Pi, Raspberry Pi Camera
+ARM 7 BOARD
+HDMI to VGA Converter
+Arduino Duemilanove Board
+Feed Mixer-
+Pneumatic  Separator
+Mini Rice Mill
+Sieve Shaker
+Ball Mill
+Deep Freezer
+Sealing Machine
+Induction Stove
+Micro weighing balance
+Slieve Shaker
+Thermal Label Printer
+Refractometer
+Weighing Balance
+Ph Meter
+Fruit Washer
+Blancher
+Milk Homogenizer and Pasteurizer
+Hot air Oven
+Dielectric oil testing Kit for HT line
+VSC (Video Spectral Comparator)  Regula VSC 4305 DMH
+ESDA (Electrostatic Detection Apparatus)  ESDA - 2
+Trinocular Sterio Microscope   Regula - 5003A- Belarus
+Dactylodcopic Magnifiers
+Compact Device Regula
+Magnifiers
+RUVIS (Reflective Ultraviolet Imaging System)  A-ZZ-FS-2-INDIA-  Arrowhead
+Path Finder  A-6505K Arrowhead  Forensics
+Reveal Forensic Field Kit  A-FS 7 Arrowhead  Forensics
+Cynoacrylate Fuming Chamber   A-2616CC - Arrowhead  Forensics
+Iodine Fuming Chamber
+Comparison Microscope  RCM-22 / Radical Saientific
+UV-Visible Spectroscopy   SPECORD 200 PLUS
+Compund Microscope  MLX i - Plus
+Stereo microscope  MSZ-B1
+UV Chamber
+Muffle Fernance
+Incubator
+Autoclave
+Water Bath  KZB-210 A
+Hot Air Oven
+Hot Plate
+Microwave Oven
+Vortex Shaker
+Personality Inventory - 3
+Hand Scoring Kit English
+Bhatia Battery Performance  Intelligence Test
+Rorschach Ink Blot Test
+UV Cabinets
+SDS-PAGE mini comb gel system Vertical Slab Mini Gel Electrophorosis & power Suply Regular
+Agarose Mini Combo Gel System Submarine Gel Electrophorosis & Power Supply Regular
+EnCase Forensic Suite  Digital Forensic Tool
+Cellebrite UFED (Universal Forensic Extraction Device)  Digital Forensics Tool Suite (hardware & software)
+Computers  INTEL (R) CORE (TM) i7-14700 GRAPHICS CARD 4GB RAM 32 1 TB SSD 2 TB SSD 64 BIT
+PH Meter  EQ - 614A
+Coductivity Meter  EQ -664A
+Potentio Meter  EQ -602
+Colori Meter   EQ -650A
+REFRACTOMETER
+BULK DENSITY APPARATUS
+HOT AIR OVEN
+ANALYTICAL BALANCE
+PH METER(ELICO)
+PH METER(KSHITIJ)
+DIGITAL BALANCE(INFRA)
+VACCUM PUMP
+HOMOGENIZER
+MECHANICAL AGITATOR
+TABLET HARDNESS TESTER -(PFIZER)
+DISTILLATION EQUIPMENT
+REFRIGERATOR
+Digital balance
+TABLET COATING MACHINE
+TABLET PUNCHING MACHINE
+MOISTURE BALANCE
+SIEVE SHAKER
+DOUBLE CONE BLENDER
+CAPSULE FILLING&SEALING MACHINE
+HOMOGINIZER
+BOTTLE FILLING MACHINNE
+BOTTLE SEALING MACHINE
+COLLAPSIBLE TUBE FILLING MACHINE
+AMPOULE FILLING &SEALING MACHINE
+AMPOULE CLARITY TEST EQUIPMENT
+AMPOULE FILLING &SEALING MACHINE (MOTORISED)
+DISINTIGRATION RATE TEST APPARATUS
+FRIABILITY TEST APPARATUS
+DIGITAL PH METER
+MUFFLE FURNACE
+MECHANICAL AGITATOR
+MECHANICAL STIREER
+DISSOLUTION RATE TEST APPARATUS
+Balances
+Disintegration test apparatus
+Digital PH meter
+Hot air oven
+Refrigator
+BROOK FIELD VISCOMETER
+CONDUCTIVITY METER
+DIGITAL pH METTER
+Tray Dryer
+DIGITAL TABLET DISSOLUTION TEST APPARATUS
+FLAME PHOTO METER
+FLASH CHROMATOGRAPHY
+HIGH PRESSURE LIQUID CHROMATO GRAPH
+NEPHELO METER
+UV-VIS SPECTRO PHOTOMETER(ELICO SL 164)
+UV-VIS SPECTRO PHOTOMETER (LAB INDIA UV 3000+)
+UV-VIS SPECTRO PHOTOMETER(SYSTRONICS  2202 )
+GAS CHROMOTO GRAPHY
+FLUORIMETER(152)
+UV CHAMBER
+ULTRA SONICATOR
+Biochemical Analyser
+FTIR
+High Speed Homogenizer
+DOUBLE BEAM UV -VIS SPECTROPHOTO METER
+CONDUCTIVITY  METER
+FLAME PHOTO METER
+NEPHELOMETER
+MECHANICAL AGITATOR
+Tablet Coating Pan
+Ointment filling machine
+Centrifuge
+Magnetic Stirrers
+FRIABILITY TEST APPARATUS (Double disk)
+HUMIDITY CHAMBER
+VACUUM PUMP
+Capsule filling machine
+Double cone blender
+=
+BULK DENSITY APPARATUS
+FRIABILITY TEST APPARATUS (single disk)
+ROTARY EVAPORATOR
+ANALAGESIO METER
+DIGITAL ACTO PHOTO METER
+DOUBLE UNIT ORGAN BATH
+ELECTRO CONVULSOMETER
+KYMOGRAPH
+MICROSCOPES (OLYMPUS)
+POLE CLIMBING APPARATUS
+ROTA ROD THREE COMPARTMENT
+Plethysmograph
+Biochemistry Analyzer
+Deep Freezer (-20 Degrees C)
+SPIROMETER
+AUTOCLAVE
+Digital colony counter
+Aseptic cabinet
+ANTIBIOTIC ZONE READER
+BACTERIOLOGICAL INCUBATOR
+BINACULAR MICROSCOPE
+BOD INCUBATOR
+COMPOUND MICROSCOPE
+Membrane Filter
+LAMINAR AIR FLOW CHAMBER
+ORBITAL SHAKER INCUBATOR
+Colori meter
+Gel Electrophoresis system
+Autoclave
+Camera lucida (Mirror & Prism type)
+prism type
+Percolators
+Clevenger apparatus
+Moisture balance
+Muffle furnace
+Soxhlet Apparatus
+vacuum pump
+U.V Chamber
+Projection Microscope
+Rota Rod Apparatus – 5 stationary
+Trinocular Microscope Phase Contrast
+MICROSCOPES
+Haematology Analyzer
+Desktop Computers
+Computers
+SolidWorks License Server
+MATLAB Cloud Node
+Adobe Creative Cloud Suite
+Ansys Multiphysics
+AutoCAD Pro License
+Unity 3D Enterprise
+Tableau Data Visualization
+Autodesk Maya
+JetBrains All Products Pack

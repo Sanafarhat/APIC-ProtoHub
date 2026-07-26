@@ -48,7 +48,10 @@ async function seedFromExcel() {
         
         // Use dynamically found key, or fallback to 'image url' if the header was correctly parsed on row 1
         const rawImageUrl = imageUrlKey ? row[imageUrlKey] : row['image url'];
-        const image = rawImageUrl ? String(rawImageUrl).trim() : null;
+        let image = rawImageUrl ? String(rawImageUrl).trim() : null;
+        if (image && (image.toLowerCase() === "no image available" || image.toLowerCase() === "null" || image === "N/A" || image === "-")) {
+            image = null;
+        }
 
         // AP Institutions list
         const apInstitutions = [
@@ -81,7 +84,7 @@ async function seedFromExcel() {
             rating: 4.5 + (Math.random() * 0.5), // Mock rating between 4.5 and 5.0
             reviews: Math.floor(Math.random() * 100) + 10,
             icon: 'Settings', // Default icon
-            imageUrl: image || '/images/default.jpg'
+            imageUrl: image || ''
           });
         }
       }
