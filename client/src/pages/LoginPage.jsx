@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { GraduationCap, Building, Loader2, Eye, EyeOff, X } from 'lucide-react';
+import { GraduationCap, Building, Loader2, Eye, EyeOff, X, Info } from 'lucide-react';
 import Terms from './Terms';
 import { auth } from '../firebase';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
@@ -252,6 +252,26 @@ const LoginPage = () => {
                       <div>
                         <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">GST No</label>
                         <input type="text" name="gstNo" className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-medium" placeholder="22AAAAA0000A1Z5" value={formData.gstNo} onChange={handleChange} required />
+                      </div>
+                    </div>
+                    
+                    <div className="mt-6 border-t border-slate-200 dark:border-slate-700 pt-6">
+                      <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-4">Uploads & Supporting Documents</h3>
+                      
+                      <div className="mb-6">
+                        <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Concept Note/ Product Brochure <span className="text-red-500">*</span></label>
+                        <input type="file" name="conceptNote" onChange={handleFileChange} accept=".pdf,.doc,.docx" className="w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" required />
+                        <p className="mt-2 text-xs text-indigo-600 dark:text-indigo-400 flex items-center gap-1">
+                          <Info size={12} /> Max file size: 5MB • Allowed types: pdf, doc, docx
+                        </p>
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Solution Technical proposal</label>
+                        <input type="file" name="technicalProposal" onChange={handleFileChange} accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" className="w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" />
+                        <p className="mt-2 text-xs text-indigo-600 dark:text-indigo-400 flex items-center gap-1">
+                          <Info size={12} /> Max file size: 5MB • Allowed types: pdf, jpg, jpeg, png, doc, docx
+                        </p>
                       </div>
                     </div>
                   </>
