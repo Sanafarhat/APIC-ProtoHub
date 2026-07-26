@@ -280,7 +280,9 @@ const UserDashboard = () => {
     }
   };
 
-  const filteredBookings = filterStatus ? bookings.filter(b => b.status === filterStatus) : bookings;
+  const filteredBookings = filterStatus 
+    ? bookings.filter(b => b.status === filterStatus) 
+    : bookings.filter(b => !['pending', 'pending_admin', 'pending_operator'].includes(b.status));
 
   const themeClass = isDarkMode ? 'dark bg-slate-900 text-slate-100' : 'bg-slate-50 text-slate-900';
   const cardClass = isDarkMode ? 'bg-slate-800 border-slate-700/50 shadow-lg shadow-black/20 text-slate-100' : 'bg-white border-slate-200 shadow-xl shadow-slate-200/40 text-slate-800';
@@ -539,10 +541,10 @@ const UserDashboard = () => {
                   </div>
                 ))}
                 {filteredBookings.length === 0 && (
-                  <div className="flex flex-col items-center justify-center h-full opacity-50 py-20">
-                    <FileText size={64} className="mb-4 text-slate-400"/>
+                  <div className="flex flex-col items-center justify-center h-full opacity-50 py-20 text-center px-4">
+                    <FileText size={64} className="mb-4 text-slate-400 mx-auto"/>
                     <p className="text-xl font-bold">No bookings found</p>
-                    <p className="text-sm mt-2">Create a new booking to get started.</p>
+                    <p className="text-sm mt-2 max-w-md">Your recent bookings will be visible here only after they have been approved by the Administrator and the Facility Operator. You can still track your pending requests in the Pipeline above.</p>
                   </div>
                 )}
               </div>
@@ -760,9 +762,9 @@ const UserDashboard = () => {
                   <Clock size={18}/> Awaiting University Approval
                 </div>
               ) : selectedBooking.status === 'approved' ? (
-                <button className="flex-1 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition-colors flex items-center justify-center gap-2" onClick={() => payBooking(selectedBooking._id)}>
-                  <DollarSign size={18}/> Complete Payment
-                </button>
+                <div className="flex-1 py-3 bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-500 font-bold rounded-xl flex items-center justify-center gap-2 cursor-default">
+                  <CheckCircle size={18}/> Approved - Awaiting Fabrication
+                </div>
               ) : (
                 <button className="flex-1 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition-colors" onClick={() => { showToast('Message sent to facility operator.', 'success'); setSelectedBooking(null); }}>
                   Contact Facility

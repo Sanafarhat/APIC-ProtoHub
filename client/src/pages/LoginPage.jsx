@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { GraduationCap, Building, Loader2, Eye, EyeOff } from 'lucide-react';
+import { GraduationCap, Building, Loader2, Eye, EyeOff, X } from 'lucide-react';
+import Terms from './Terms';
 import { auth } from '../firebase';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 
@@ -13,6 +14,7 @@ const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showTerms, setShowTerms] = useState(false);
 
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
@@ -171,7 +173,7 @@ const LoginPage = () => {
               <div className="flex items-start gap-2 pt-2 text-sm text-slate-600 dark:text-slate-400 font-medium">
                 <input type="checkbox" id="terms" required className="mt-1 rounded text-indigo-600 focus:ring-indigo-500" />
                 <label htmlFor="terms">
-                  I agree to the <Link to="/terms" target="_blank" rel="noopener noreferrer" className="text-indigo-600 dark:text-indigo-400 font-bold hover:underline">Terms & Conditions</Link>
+                  I agree to the <button type="button" onClick={() => setShowTerms(true)} className="text-indigo-600 dark:text-indigo-400 font-bold hover:underline">Terms & Conditions</button>
                 </label>
               </div>
             )}
@@ -192,6 +194,17 @@ const LoginPage = () => {
           </p>
         </div>
       </div>
+      
+      {showTerms && (
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/50 backdrop-blur-sm p-4 sm:p-8 flex items-start justify-center">
+          <div className="relative w-full max-w-4xl mx-auto mt-10">
+            <button onClick={() => setShowTerms(false)} className="absolute top-4 right-4 z-10 p-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 rounded-full transition-colors">
+              <X size={24} className="text-slate-600 dark:text-slate-300"/>
+            </button>
+            <Terms isModal={true} onClose={() => setShowTerms(false)} />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

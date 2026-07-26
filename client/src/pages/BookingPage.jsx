@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { X, Calendar, Clock, Loader2, Sparkles, AlertCircle, CheckCircle, CreditCard, ShieldCheck, UploadCloud, MapPin, Phone, Building } from 'lucide-react';
 import { jsPDF } from "jspdf";
+import Terms from './Terms';
 
 const BookingPage = () => {
   const { id } = useParams();
@@ -26,6 +27,7 @@ const BookingPage = () => {
   const [selectedSlot, setSelectedSlot] = useState('');
   const [paymentProcessing, setPaymentProcessing] = useState(false);
   const [showMockRazorpay, setShowMockRazorpay] = useState(false);
+  const [showTerms, setShowTerms] = useState(false);
   const [orderAmount, setOrderAmount] = useState(0);
 
   useEffect(() => {
@@ -366,7 +368,7 @@ const BookingPage = () => {
                         <div className="flex items-start gap-3 mb-6 p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700">
                           <input type="checkbox" id="terms" required checked={agreeTerms} onChange={e => setAgreeTerms(e.target.checked)} className="mt-1 rounded text-indigo-600 focus:ring-indigo-500" />
                           <label htmlFor="terms" className="text-sm font-medium text-slate-600 dark:text-slate-400">
-                            I agree to the <Link to="/terms" target="_blank" rel="noopener noreferrer" className="text-indigo-600 dark:text-indigo-400 font-bold hover:underline">Terms & Conditions</Link> and understand that facility rules apply.
+                            I agree to the <button type="button" onClick={() => setShowTerms(true)} className="text-indigo-600 dark:text-indigo-400 font-bold hover:underline">Terms & Conditions</button> and understand that facility rules apply.
                           </label>
                         </div>
 
@@ -433,6 +435,17 @@ const BookingPage = () => {
         </div>
 
       </div>
+      
+      {showTerms && (
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/50 backdrop-blur-sm p-4 sm:p-8 flex items-start justify-center">
+          <div className="relative w-full max-w-4xl mx-auto mt-10">
+            <button onClick={() => setShowTerms(false)} className="absolute top-4 right-4 z-10 p-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 rounded-full transition-colors">
+              <X size={24} className="text-slate-600 dark:text-slate-300"/>
+            </button>
+            <Terms isModal={true} onClose={() => setShowTerms(false)} />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

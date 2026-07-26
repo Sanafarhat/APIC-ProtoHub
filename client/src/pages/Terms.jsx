@@ -2,11 +2,11 @@ import React from 'react';
 import { Shield, CheckCircle, Scale } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-const Terms = () => {
+const Terms = ({ isModal = false, onClose }) => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-slate-50 py-12 px-4 sm:px-6 lg:px-8 font-sans pb-24">
+    <div className={`${isModal ? 'py-4' : 'min-h-screen bg-slate-50 py-12 px-4 sm:px-6 lg:px-8 font-sans pb-24'}`}>
       <div className="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-200">
         
         {/* Header */}
@@ -90,17 +90,21 @@ const Terms = () => {
           {/* Action Buttons */}
           <div className="mt-12 pt-8 border-t border-slate-200 flex flex-col sm:flex-row gap-4 justify-end">
             <button 
-              onClick={() => navigate(-1)}
+              type="button"
+              onClick={() => isModal && onClose ? onClose() : navigate(-1)}
               className="px-6 py-3 rounded-xl font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 transition-colors"
             >
               Go Back
             </button>
-            <button 
-              onClick={() => navigate('/')}
-              className="px-6 py-3 rounded-xl font-bold text-white bg-blue-600 hover:bg-blue-700 transition-colors shadow-lg shadow-blue-600/30"
-            >
-              Return Home
-            </button>
+            {!isModal && (
+              <button 
+                type="button"
+                onClick={() => navigate('/')}
+                className="px-6 py-3 rounded-xl font-bold text-white bg-blue-600 hover:bg-blue-700 transition-colors shadow-lg shadow-blue-600/30"
+              >
+                Return Home
+              </button>
+            )}
           </div>
         </div>
       </div>
