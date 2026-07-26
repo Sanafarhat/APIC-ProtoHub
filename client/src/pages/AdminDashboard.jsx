@@ -109,6 +109,18 @@ const AdminDashboard = () => {
     setTimeout(() => setLoading(false), 1200);
   }, []);
 
+  const handleLogout = async () => {
+    try {
+      await auth.signOut();
+    } catch(err) {
+      console.error(err);
+    }
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setIsAuthenticated(false);
+    navigate("/admin");
+  };
+
   const handleAdminLogin = async (e) => {
     e.preventDefault();
     setLoginError("");
@@ -374,9 +386,9 @@ const AdminDashboard = () => {
           </div>
           <button
             className="p-3 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white hover:border-slate-600 transition-colors"
-            onClick={() => navigate("/")}
+            onClick={handleLogout}
           >
-            Exit Node
+            Sign Out / Exit Node
           </button>
         </div>
       </header>
