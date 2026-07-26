@@ -19,8 +19,6 @@ const userSchema = new mongoose.Schema({
   govIdProof: { type: String },
   studentIdProof: { type: String },
   facilityProof: { type: String },
-  conceptNote: { type: String },
-  technicalProposal: { type: String },
   createdAt: { type: Date, default: Date.now }
 });
 
