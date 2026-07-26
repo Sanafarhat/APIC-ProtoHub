@@ -691,6 +691,111 @@ const UserDashboard = () => {
             </div>
           )}
 
+      {/* TAB 7: REVIEW & FEEDBACK */}
+      {activeTab === 'feedback' && (
+        <div className="space-y-6 animate-fade-in flex-1">
+          <div className={`p-6 rounded-2xl border ${isDarkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'} shadow-sm`}>
+            <div className="flex items-center justify-between mb-6 border-b pb-4 dark:border-slate-700">
+              <h2 className="text-xl font-black flex items-center gap-2"><Star className="text-pink-500" /> Review & Feedback</h2>
+              <span className={`text-xs font-bold uppercase tracking-widest ${textMuted}`}>Help Us Improve</span>
+            </div>
+
+            {completedBookings.length === 0 ? (
+              <div className="text-center py-10">
+                <p className={`${textMuted}`}>You do not have any completed bookings to review yet.</p>
+                <button className="mt-4 text-blue-500 font-bold hover:underline" onClick={() => setActiveTab('overview')}>Back to Dashboard</button>
+              </div>
+            ) : (
+              <form onSubmit={handleFeedbackSubmit} className="space-y-6">
+                <div>
+                  <label className={`block text-sm font-bold mb-2 ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>Select Completed Resource/Facility</label>
+                  <select 
+                    className={`w-full p-3 rounded-xl border ${isDarkMode ? 'bg-slate-900 border-slate-700 text-white' : 'bg-slate-50 border-slate-200'} focus:ring-2 focus:ring-pink-500 focus:outline-none`}
+                    value={feedbackData.bookingId}
+                    onChange={(e) => setFeedbackData({...feedbackData, bookingId: e.target.value})}
+                    required
+                  >
+                    <option value="">-- Choose a Facility --</option>
+                    {completedBookings.map(b => (
+                      <option key={b._id} value={b._id}>{b.facility?.name || 'Precision Milling Center'} (Job: {b._id.slice(-6).toUpperCase()})</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="p-4 rounded-xl border border-pink-100 bg-pink-50/50 dark:border-pink-900/30 dark:bg-pink-900/10">
+                  <label className={`block text-sm font-bold mb-3 ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>Rate Your Experience</label>
+                  <div className="flex gap-2">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <button
+                        type="button"
+                        key={star}
+                        onClick={() => setFeedbackData({...feedbackData, rating: star})}
+                        className={`transition-all duration-200 hover:scale-110 ${feedbackData.rating >= star ? 'text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.6)]' : 'text-slate-300 dark:text-slate-600'}`}
+                      >
+                        <Star size={32} fill={feedbackData.rating >= star ? "currentColor" : "none"} />
+                      </button>
+                    ))}
+                  </div>
+                  {feedbackData.rating > 0 && <p className="text-xs font-bold mt-2 text-pink-600 dark:text-pink-400">You selected {feedbackData.rating} out of 5 stars.</p>}
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className={`p-4 rounded-xl border ${isDarkMode ? 'border-slate-700' : 'border-slate-200'}`}>
+                    <label className={`block text-sm font-bold mb-2 ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>Facility Quality</label>
+                    <p className={`text-xs mb-3 ${textMuted}`}>How was the equipment and infrastructure?</p>
+                    <select 
+                      className={`w-full p-2.5 rounded-lg border text-sm ${isDarkMode ? 'bg-slate-800 border-slate-600 text-white' : 'bg-white border-slate-300'} focus:ring-2 focus:ring-pink-500 focus:outline-none`}
+                      value={feedbackData.facilityQuality}
+                      onChange={(e) => setFeedbackData({...feedbackData, facilityQuality: e.target.value})}
+                    >
+                      <option value="Excellent">Excellent</option>
+                      <option value="Good">Good</option>
+                      <option value="Average">Average</option>
+                      <option value="Needs Improvement">Needs Improvement</option>
+                    </select>
+                  </div>
+                  
+                  <div className={`p-4 rounded-xl border ${isDarkMode ? 'border-slate-700' : 'border-slate-200'}`}>
+                    <label className={`block text-sm font-bold mb-2 ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>Timeliness</label>
+                    <p className={`text-xs mb-3 ${textMuted}`}>Was the fabrication completed on time?</p>
+                    <select 
+                      className={`w-full p-2.5 rounded-lg border text-sm ${isDarkMode ? 'bg-slate-800 border-slate-600 text-white' : 'bg-white border-slate-300'} focus:ring-2 focus:ring-pink-500 focus:outline-none`}
+                      value={feedbackData.timeliness}
+                      onChange={(e) => setFeedbackData({...feedbackData, timeliness: e.target.value})}
+                    >
+                      <option value="Faster Than Expected">Faster Than Expected</option>
+                      <option value="On Time">On Time</option>
+                      <option value="Slightly Delayed">Slightly Delayed</option>
+                      <option value="Very Late">Very Late</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label className={`block text-sm font-bold mb-2 ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>Optional Remarks / Comments</label>
+                  <textarea 
+                    className={`w-full p-3 rounded-xl border min-h-[100px] resize-none ${isDarkMode ? 'bg-slate-900 border-slate-700 text-white' : 'bg-slate-50 border-slate-200'} focus:ring-2 focus:ring-pink-500 focus:outline-none`}
+                    placeholder="Tell us what you liked or how we can improve..."
+                    value={feedbackData.comment}
+                    onChange={(e) => setFeedbackData({...feedbackData, comment: e.target.value})}
+                  ></textarea>
+                </div>
+
+                <div className="flex justify-end pt-2">
+                  <button 
+                    type="submit" 
+                    disabled={isSubmittingFeedback}
+                    className="px-6 py-3 bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-500 hover:to-rose-500 text-white font-bold rounded-xl shadow-lg shadow-pink-500/30 transition-all flex items-center gap-2"
+                  >
+                    {isSubmittingFeedback ? <Activity size={18} className="animate-spin" /> : <ThumbsUp size={18} />}
+                    Submit Feedback
+                  </button>
+                </div>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
         </div>
       </div>
 
@@ -828,111 +933,6 @@ const UserDashboard = () => {
         </div>
       )}
 
-      {/* TAB 7: REVIEW & FEEDBACK */}
-      {activeTab === 'feedback' && (
-        <div className="space-y-6 animate-fade-in flex-1">
-          <div className={`p-6 rounded-2xl border ${isDarkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200'} shadow-sm`}>
-            <div className="flex items-center justify-between mb-6 border-b pb-4 dark:border-slate-700">
-              <h2 className="text-xl font-black flex items-center gap-2"><Star className="text-pink-500" /> Review & Feedback</h2>
-              <span className={`text-xs font-bold uppercase tracking-widest ${textMuted}`}>Help Us Improve</span>
-            </div>
-
-            {completedBookings.length === 0 ? (
-              <div className="text-center py-10">
-                <p className={`${textMuted}`}>You do not have any completed bookings to review yet.</p>
-                <button className="mt-4 text-blue-500 font-bold hover:underline" onClick={() => setActiveTab('overview')}>Back to Dashboard</button>
-              </div>
-            ) : (
-              <form onSubmit={handleFeedbackSubmit} className="space-y-6">
-                <div>
-                  <label className={`block text-sm font-bold mb-2 ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>Select Completed Resource/Facility</label>
-                  <select 
-                    className={`w-full p-3 rounded-xl border ${isDarkMode ? 'bg-slate-900 border-slate-700 text-white' : 'bg-slate-50 border-slate-200'} focus:ring-2 focus:ring-pink-500 focus:outline-none`}
-                    value={feedbackData.bookingId}
-                    onChange={(e) => setFeedbackData({...feedbackData, bookingId: e.target.value})}
-                    required
-                  >
-                    <option value="">-- Choose a Facility --</option>
-                    {completedBookings.map(b => (
-                      <option key={b._id} value={b._id}>{b.facility?.name || 'Precision Milling Center'} (Job: {b._id.slice(-6).toUpperCase()})</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="p-4 rounded-xl border border-pink-100 bg-pink-50/50 dark:border-pink-900/30 dark:bg-pink-900/10">
-                  <label className={`block text-sm font-bold mb-3 ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>Rate Your Experience</label>
-                  <div className="flex gap-2">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <button
-                        type="button"
-                        key={star}
-                        onClick={() => setFeedbackData({...feedbackData, rating: star})}
-                        className={`transition-all duration-200 hover:scale-110 ${feedbackData.rating >= star ? 'text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.6)]' : 'text-slate-300 dark:text-slate-600'}`}
-                      >
-                        <Star size={32} fill={feedbackData.rating >= star ? "currentColor" : "none"} />
-                      </button>
-                    ))}
-                  </div>
-                  {feedbackData.rating > 0 && <p className="text-xs font-bold mt-2 text-pink-600 dark:text-pink-400">You selected {feedbackData.rating} out of 5 stars.</p>}
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className={`p-4 rounded-xl border ${isDarkMode ? 'border-slate-700' : 'border-slate-200'}`}>
-                    <label className={`block text-sm font-bold mb-2 ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>Facility Quality</label>
-                    <p className={`text-xs mb-3 ${textMuted}`}>How was the equipment and infrastructure?</p>
-                    <select 
-                      className={`w-full p-2.5 rounded-lg border text-sm ${isDarkMode ? 'bg-slate-800 border-slate-600 text-white' : 'bg-white border-slate-300'} focus:ring-2 focus:ring-pink-500 focus:outline-none`}
-                      value={feedbackData.facilityQuality}
-                      onChange={(e) => setFeedbackData({...feedbackData, facilityQuality: e.target.value})}
-                    >
-                      <option value="Excellent">Excellent</option>
-                      <option value="Good">Good</option>
-                      <option value="Average">Average</option>
-                      <option value="Needs Improvement">Needs Improvement</option>
-                    </select>
-                  </div>
-                  
-                  <div className={`p-4 rounded-xl border ${isDarkMode ? 'border-slate-700' : 'border-slate-200'}`}>
-                    <label className={`block text-sm font-bold mb-2 ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>Timeliness</label>
-                    <p className={`text-xs mb-3 ${textMuted}`}>Was the fabrication completed on time?</p>
-                    <select 
-                      className={`w-full p-2.5 rounded-lg border text-sm ${isDarkMode ? 'bg-slate-800 border-slate-600 text-white' : 'bg-white border-slate-300'} focus:ring-2 focus:ring-pink-500 focus:outline-none`}
-                      value={feedbackData.timeliness}
-                      onChange={(e) => setFeedbackData({...feedbackData, timeliness: e.target.value})}
-                    >
-                      <option value="Faster Than Expected">Faster Than Expected</option>
-                      <option value="On Time">On Time</option>
-                      <option value="Slightly Delayed">Slightly Delayed</option>
-                      <option value="Very Late">Very Late</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div>
-                  <label className={`block text-sm font-bold mb-2 ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>Optional Remarks / Comments</label>
-                  <textarea 
-                    className={`w-full p-3 rounded-xl border min-h-[100px] resize-none ${isDarkMode ? 'bg-slate-900 border-slate-700 text-white' : 'bg-slate-50 border-slate-200'} focus:ring-2 focus:ring-pink-500 focus:outline-none`}
-                    placeholder="Tell us what you liked or how we can improve..."
-                    value={feedbackData.comment}
-                    onChange={(e) => setFeedbackData({...feedbackData, comment: e.target.value})}
-                  ></textarea>
-                </div>
-
-                <div className="flex justify-end pt-2">
-                  <button 
-                    type="submit" 
-                    disabled={isSubmittingFeedback}
-                    className="px-6 py-3 bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-500 hover:to-rose-500 text-white font-bold rounded-xl shadow-lg shadow-pink-500/30 transition-all flex items-center gap-2"
-                  >
-                    {isSubmittingFeedback ? <Activity size={18} className="animate-spin" /> : <ThumbsUp size={18} />}
-                    Submit Feedback
-                  </button>
-                </div>
-              </form>
-            )}
-          </div>
-        </div>
-      )}
 
       {/* AI QUOTATION MODAL */}
       {aiQuoteModal && (
