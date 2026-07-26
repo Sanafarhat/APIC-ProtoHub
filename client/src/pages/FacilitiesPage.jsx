@@ -44,10 +44,15 @@ const FacilitiesPage = () => {
   const handleAddFacility = async (e) => {
     e.preventDefault();
     try {
+      const payload = { ...newFacilityData };
+      if (isOperator) {
+        payload.institution = user.organization;
+        payload.location = user.location;
+      }
       const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/facilities`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newFacilityData)
+        body: JSON.stringify(payload)
       });
       if (res.ok) {
         const addedFacility = await res.json();
@@ -223,7 +228,7 @@ const FacilitiesPage = () => {
                               {(isOperator || isAdmin) && (
                                 <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 bg-slate-100 dark:bg-slate-800 px-3 py-2 rounded-lg">Innovators Only</span>
                               )}
-                              {(isOperator || isAdmin) && (
+                              {(isAdmin || (isOperator && fac.institution === user.organization)) && (
                                 <button onClick={() => handleDeleteFacility(fac._id)} className="px-3 py-2 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900/50 rounded-lg text-sm font-bold transition-colors">
                                   Delete
                                 </button>
@@ -261,7 +266,7 @@ const FacilitiesPage = () => {
                   </div>
                   <div>
                     <label className="block text-sm font-bold mb-1.5">Institution / Partner</label>
-                    <input type="text" name="institution" className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:ring-2 focus:ring-indigo-500 outline-none transition-all" value={newFacilityData.institution} onChange={(e) => setNewFacilityData({ ...newFacilityData, institution: e.target.value })} />
+                    <input type="text" name="institution" className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:ring-2 focus:ring-indigo-500 outline-none transition-all" value={isOperator ? user.organization : newFacilityData.institution} onChange={(e) => !isOperator && setNewFacilityData({ ...newFacilityData, institution: e.target.value })} disabled={isOperator} />
                   </div>
                 </div>
 
@@ -273,7 +278,7 @@ const FacilitiesPage = () => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                   <div>
                     <label className="block text-sm font-bold mb-1.5">Location</label>
-                    <input type="text" name="location" className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:ring-2 focus:ring-indigo-500 outline-none transition-all" value={newFacilityData.location} onChange={(e) => setNewFacilityData({ ...newFacilityData, location: e.target.value })} required />
+                    <input type="text" name="location" className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:ring-2 focus:ring-indigo-500 outline-none transition-all" value={isOperator ? user.location : newFacilityData.location} onChange={(e) => !isOperator && setNewFacilityData({ ...newFacilityData, location: e.target.value })} disabled={isOperator} required />
                   </div>
                   <div>
                     <label className="block text-sm font-bold mb-1.5">Equipment Type</label>

@@ -5,7 +5,11 @@ const User = require('../models/User');
 // Register - Called after successful Firebase Registration
 router.post('/register', async (req, res) => {
   try {
-    const { uid, name, email, role } = req.body;
+    const { 
+      uid, name, email, role, phone, category, organization, 
+      location, recentDegree, dpiitNo, gstNo, designation, 
+      facilityName, govIdProof, studentIdProof, facilityProof 
+    } = req.body;
     let user = await User.findOne({ email });
     if (user) return res.status(400).json({ message: 'User already exists in DB' });
 
@@ -13,12 +17,24 @@ router.post('/register', async (req, res) => {
       uid,
       name,
       email,
-      role: role || 'innovator'
+      role: role || 'innovator',
+      phone,
+      category,
+      organization,
+      location,
+      recentDegree,
+      dpiitNo,
+      gstNo,
+      designation,
+      facilityName,
+      govIdProof,
+      studentIdProof,
+      facilityProof
     });
 
     await user.save();
 
-    res.status(201).json({ user: { id: user.id, uid: user.uid, name: user.name, email: user.email, role: user.role } });
+    res.status(201).json({ user: { id: user.id, uid: user.uid, name: user.name, email: user.email, role: user.role, organization: user.organization, location: user.location } });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server error');
@@ -36,7 +52,7 @@ router.post('/login', async (req, res) => {
       return res.status(404).json({ message: 'User profile not found in database' });
     }
 
-    res.json({ user: { id: user.id, uid: user.uid, name: user.name, email: user.email, role: user.role } });
+    res.json({ user: { id: user.id, uid: user.uid, name: user.name, email: user.email, role: user.role, organization: user.organization, location: user.location } });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server error');

@@ -8,7 +8,12 @@ import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'fire
 const LoginPage = () => {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
-  const [formData, setFormData] = useState({ name: '', email: '', password: '', confirmPassword: '', role: 'innovator' });
+  const [formData, setFormData] = useState({ 
+    name: '', email: '', password: '', confirmPassword: '', role: 'innovator',
+    phone: '', category: 'Student', organization: '', location: '',
+    recentDegree: '', dpiitNo: '', gstNo: '', designation: '', facilityName: '',
+    govIdProof: '', studentIdProof: '', facilityProof: ''
+  });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
@@ -17,6 +22,21 @@ const LoginPage = () => {
   const [showTerms, setShowTerms] = useState(false);
 
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+  
+  const handleFileChange = (e) => {
+    if (e.target.files && e.target.files.length > 0) {
+      // Mock file upload by just storing the file name or a mock URL
+      setFormData({ ...formData, [e.target.name]: `/mock-storage/${e.target.files[0].name}` });
+    }
+  };
+
+  const handleRoleChange = (role) => {
+    setFormData({ 
+      ...formData, 
+      role, 
+      category: role === 'innovator' ? 'Student' : 'University'
+    });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -65,7 +85,7 @@ const LoginPage = () => {
         const res = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/auth/register`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ uid: firebaseUser.uid, name: formData.name, email: formData.email, role: formData.role })
+          body: JSON.stringify({ uid: firebaseUser.uid, ...formData })
         });
         
         if (!res.ok) {
@@ -127,14 +147,14 @@ const LoginPage = () => {
                 <button
                   type="button"
                   className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg text-sm font-bold transition-all ${formData.role === 'innovator' ? 'bg-white dark:bg-slate-700 shadow-sm text-indigo-600 dark:text-indigo-400' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
-                  onClick={() => setFormData({ ...formData, role: 'innovator' })}
+                  onClick={() => handleRoleChange('innovator')}
                 >
                   <GraduationCap size={16} /> Innovator
                 </button>
                 <button
                   type="button"
                   className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg text-sm font-bold transition-all ${formData.role === 'operator' ? 'bg-white dark:bg-slate-700 shadow-sm text-indigo-600 dark:text-indigo-400' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'}`}
-                  onClick={() => setFormData({ ...formData, role: 'operator' })}
+                  onClick={() => handleRoleChange('operator')}
                 >
                   <Building size={16} /> Operator
                 </button>
@@ -142,9 +162,133 @@ const LoginPage = () => {
             )}
 
             {!isLogin && (
-              <div>
-                <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Full Name</label>
-                <input type="text" name="name" className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-medium" placeholder="John Doe" value={formData.name} onChange={handleChange} required />
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Category</label>
+                  <select name="category" value={formData.category} onChange={handleChange} className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-medium appearance-none">
+                    {formData.role === 'innovator' ? (
+                      <>
+                        <option value="Student">Student</option>
+                        <option value="Professional">Professional</option>
+                        <option value="Startup/MSME">Startup/MSME</option>
+                      </>
+                    ) : (
+                      <>
+                        <option value="University">University/College</option>
+                        <option value="Govt Department">Govt Department</option>
+                        <option value="Incubator">Incubator</option>
+                        <option value="Private Manufacturing">Private Manufacturing</option>
+                      </>
+                    )}
+                  </select>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Full Name</label>
+                    <input type="text" name="name" className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-medium" placeholder="John Doe" value={formData.name} onChange={handleChange} required />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Phone Number</label>
+                    <input type="tel" name="phone" className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-medium" placeholder="+91 9876543210" value={formData.phone} onChange={handleChange} required />
+                  </div>
+                </div>
+
+                {formData.role === 'innovator' && formData.category === 'Student' && (
+                  <>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">College Name</label>
+                        <input type="text" name="organization" className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-medium" placeholder="Institute of Technology" value={formData.organization} onChange={handleChange} required />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Recent Degree</label>
+                        <input type="text" name="recentDegree" className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-medium" placeholder="B.Tech Computer Science" value={formData.recentDegree} onChange={handleChange} required />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Student ID Proof</label>
+                        <input type="file" name="studentIdProof" onChange={handleFileChange} className="w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" required />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Gov ID Proof</label>
+                        <input type="file" name="govIdProof" onChange={handleFileChange} className="w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" required />
+                      </div>
+                    </div>
+                  </>
+                )}
+
+                {formData.role === 'innovator' && formData.category === 'Professional' && (
+                  <>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Organization</label>
+                        <input type="text" name="organization" className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-medium" placeholder="Company Name" value={formData.organization} onChange={handleChange} required />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Designation</label>
+                        <input type="text" name="designation" className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-medium" placeholder="Senior Engineer" value={formData.designation} onChange={handleChange} required />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Gov ID Proof</label>
+                      <input type="file" name="govIdProof" onChange={handleFileChange} className="w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" required />
+                    </div>
+                  </>
+                )}
+
+                {formData.role === 'innovator' && formData.category === 'Startup/MSME' && (
+                  <>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="col-span-2">
+                        <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Company Name</label>
+                        <input type="text" name="organization" className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-medium" placeholder="Startup Inc." value={formData.organization} onChange={handleChange} required />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">DPIIT Registration No</label>
+                        <input type="text" name="dpiitNo" className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-medium" placeholder="DIPPXXXX" value={formData.dpiitNo} onChange={handleChange} />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">GST No</label>
+                        <input type="text" name="gstNo" className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-medium" placeholder="22AAAAA0000A1Z5" value={formData.gstNo} onChange={handleChange} required />
+                      </div>
+                    </div>
+                  </>
+                )}
+
+                {formData.role === 'operator' && (
+                  <>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Organization / College Name</label>
+                        <input type="text" name="organization" className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-medium" placeholder="Aditya University" value={formData.organization} onChange={handleChange} required />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Location / City</label>
+                        <input type="text" name="location" className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-medium" placeholder="Surampalem" value={formData.location} onChange={handleChange} required />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Facility Name</label>
+                        <input type="text" name="facilityName" className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-medium" placeholder="Advanced Prototyping Lab" value={formData.facilityName} onChange={handleChange} required />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Designation</label>
+                        <input type="text" name="designation" className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-medium" placeholder="Lab In-charge" value={formData.designation} onChange={handleChange} required />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Facility Reg. Proof</label>
+                        <input type="file" name="facilityProof" onChange={handleFileChange} className="w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" required />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-1.5">Gov ID Proof</label>
+                        <input type="file" name="govIdProof" onChange={handleFileChange} className="w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" required />
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
             )}
 
