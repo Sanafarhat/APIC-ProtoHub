@@ -889,10 +889,21 @@ const AdminDashboard = () => {
                         {booking.facility?.name}
                       </p>
                       <p className="text-slate-300">
+                        <span className="text-slate-500 mr-2">College/Org:</span>{" "}
+                        {booking.facility?.institution || 'N/A'}
+                      </p>
+                      <p className="text-slate-300">
                         <span className="text-slate-500 mr-2">Amount:</span> ₹
                         {booking.totalCost}
                       </p>
                     </div>
+                    {booking.attachedFile && (
+                      <div className="pt-2">
+                        <a href={booking.attachedFile} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-400 hover:text-indigo-300 bg-indigo-500/10 hover:bg-indigo-500/20 px-3 py-1.5 rounded-lg transition-colors" download>
+                          <Download size={14} /> Download Receipt/File
+                        </a>
+                      </div>
+                    )}
                     <div className="mt-auto pt-4 border-t border-slate-800 flex gap-2">
                       <button
                         onClick={() =>

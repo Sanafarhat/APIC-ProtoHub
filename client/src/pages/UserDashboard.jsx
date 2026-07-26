@@ -728,6 +728,7 @@ const UserDashboard = () => {
               <div className={`p-4 rounded-xl ${isDarkMode ? 'bg-slate-900/50' : 'bg-slate-50'}`}>
                 <p className={`text-xs font-bold uppercase tracking-wider mb-1 ${textMuted}`}>Facility</p>
                 <p className="font-bold text-lg">{selectedBooking.facility?.name || 'Precision Milling Center'}</p>
+                <p className={`text-sm ${textMuted} mt-1 font-medium`}>{selectedBooking.facility?.institution || 'N/A'}</p>
               </div>
               
               <div className="grid grid-cols-2 gap-4">
