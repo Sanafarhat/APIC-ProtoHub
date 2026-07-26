@@ -36,6 +36,23 @@ const isValidImageUrl = (url) => {
   return true;
 };
 
+const FacilityImage = ({ fac }) => {
+  const [hasError, setHasError] = useState(false);
+  
+  const src = (hasError || !isValidImageUrl(fac.imageUrl)) 
+    ? getDeterministicImage(fac.name) 
+    : fac.imageUrl;
+
+  return (
+    <img
+      src={src}
+      onError={() => setHasError(true)}
+      alt={fac.name}
+      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+    />
+  );
+};
+
 const FacilitiesPage = () => {
   const location = useLocation();
   const [facilities, setFacilities] = useState([]);
@@ -230,15 +247,7 @@ const FacilitiesPage = () => {
                           <div className="absolute top-3 right-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur px-2.5 py-1 rounded-lg text-xs font-black shadow flex items-center gap-1 z-10 text-slate-800 dark:text-slate-200">
                             <Star size={12} className="text-amber-500 fill-amber-500" /> {fac.rating}
                           </div>
-                          <img
-                            src={isValidImageUrl(fac.imageUrl) ? fac.imageUrl : getDeterministicImage(fac.name)}
-                            onError={(e) => {
-                              e.target.onerror = null;
-                              e.target.src = getDeterministicImage(fac.name);
-                            }}
-                            alt={fac.name}
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                          />
+                          <FacilityImage fac={fac} />
                         </div>
                         <div className="p-5 flex-1 flex flex-col">
                           <div className="flex items-start justify-between mb-2">
