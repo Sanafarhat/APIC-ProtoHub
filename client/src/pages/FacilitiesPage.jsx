@@ -2,6 +2,31 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { MapPin, Star, Search, Plus, Map, List, Building, Zap, X } from 'lucide-react';
 
+const DEFAULT_IMAGES = [
+  "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=800",
+  "https://images.unsplash.com/photo-1610419286824-c1e19488da15?auto=format&fit=crop&q=80&w=800",
+  "https://images.unsplash.com/photo-1565439399815-5674c5d263b5?auto=format&fit=crop&q=80&w=800",
+  "https://images.unsplash.com/photo-1504917595217-d4bf597a1f6a?auto=format&fit=crop&q=80&w=800",
+  "https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=800",
+  "https://images.unsplash.com/photo-1580982333069-7a56113b8606?auto=format&fit=crop&q=80&w=800",
+  "https://images.unsplash.com/photo-1517420704952-d9f39740e38f?auto=format&fit=crop&q=80&w=800",
+  "https://images.unsplash.com/photo-1620021966453-6258f79fbc95?auto=format&fit=crop&q=80&w=800",
+  "https://images.unsplash.com/photo-1537462715879-360eeb61a0ad?auto=format&fit=crop&q=80&w=800",
+  "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=800",
+  "https://images.unsplash.com/photo-1581093458791-9f3c3900df4b?auto=format&fit=crop&q=80&w=800",
+  "https://images.unsplash.com/photo-1563804868000-8488258e7724?auto=format&fit=crop&q=80&w=800",
+  "https://images.unsplash.com/photo-1631427962232-803d4f30c64f?auto=format&fit=crop&q=80&w=800"
+];
+
+const getDeterministicImage = (name) => {
+  if (!name) return DEFAULT_IMAGES[0];
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return DEFAULT_IMAGES[Math.abs(hash) % DEFAULT_IMAGES.length];
+};
+
 const FacilitiesPage = () => {
   const location = useLocation();
   const [facilities, setFacilities] = useState([]);
@@ -197,7 +222,7 @@ const FacilitiesPage = () => {
                             <Star size={12} className="text-amber-500 fill-amber-500" /> {fac.rating}
                           </div>
                           <img
-                            src={fac.imageUrl || "/images/default.jpg"}
+                            src={fac.imageUrl || getDeterministicImage(fac.name)}
                             alt={fac.name}
                             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                           />
