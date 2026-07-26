@@ -50,9 +50,15 @@ const LoginPage = () => {
         localStorage.setItem('token', token);
         localStorage.setItem('user', JSON.stringify(data.user));
         
-        if (data.user.role === 'admin') navigate('/admin');
-        else if (data.user.role === 'operator') navigate('/operator-dashboard');
-        else navigate('/dashboard');
+        if (data.user.role === 'admin') {
+          await auth.signOut();
+          setLoading(false);
+          return setError('Admins must log in through the secure Admin Portal.');
+        } else if (data.user.role === 'operator') {
+          navigate('/operator-dashboard');
+        } else {
+          navigate('/dashboard');
+        }
       } else {
         const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
         firebaseUser = userCredential.user;

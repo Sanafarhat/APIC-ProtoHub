@@ -799,24 +799,7 @@ const UserDashboard = () => {
               </div>
             )}
             
-            {/* FEEDBACK SECTION */}
-            {selectedBooking.status === 'completed' && !selectedBooking.feedback && (
-              <div className="mt-4 p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50">
-                <p className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Leave Remarks / Feedback</p>
-                <textarea 
-                  id={`feedback-${selectedBooking._id}`}
-                  className="w-full p-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm focus:outline-none focus:border-indigo-500" 
-                  rows="3" 
-                  placeholder="Report issues or provide feedback on the fabrication..."
-                ></textarea>
-                <button 
-                  className="mt-2 w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg transition-colors text-sm"
-                  onClick={() => submitFeedback(selectedBooking._id, document.getElementById(`feedback-${selectedBooking._id}`).value)}
-                >
-                  Submit Feedback
-                </button>
-              </div>
-            )}
+
             {selectedBooking.status === 'completed' && selectedBooking.feedback && (
               <div className="mt-4 p-4 rounded-xl border border-indigo-200 bg-indigo-50 dark:bg-indigo-900/30 dark:border-indigo-800 relative group">
                 <button 
